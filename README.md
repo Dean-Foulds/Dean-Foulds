@@ -1,6 +1,6 @@
 # Dean Foulds – Data Scientist & Machine Learning Engineer
 
-📍 London | 📞 07514 298902 | ✉️ deanfoulds@gmail.com  
+📍 London | ✉️ deanfoulds@gmail.com  
 
 🌐 [Homepage](https://github.com/Dean-Foulds) | [LinkedIn](https://www.linkedin.com/in/dean-foulds) | [GitHub](https://github.com/Dean-Foulds)
 
