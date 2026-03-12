@@ -1,8 +1,12 @@
+---
+title: Dean Foulds – Data Scientist & ML Engineer
+---
+
 # Dean Foulds – Data Scientist & Machine Learning Engineer
 
 📍 London | ✉️ deanfoulds@gmail.com  
 
-🌐 [Homepage](https://github.com/Dean-Foulds) | [LinkedIn](https://www.linkedin.com/in/dean-foulds) | [GitHub](https://github.com/Dean-Foulds)
+🌐 [Homepage](https://deanfoulds.github.io/) | [LinkedIn](https://www.linkedin.com/in/dean-foulds) | [GitHub](https://github.com/Dean-Foulds)
 
 ---
 
@@ -24,7 +28,7 @@ I have extensive experience with **AWS** and **Google Cloud** platforms, deployi
 ---
 
 ## 💻 Skills & Tech Stack
-Python | Lean | Ruby | TensorFlow | AWS | Google Cloud | Microsoft Power BI | Git | Docker | Latex  
+Python | Lean | Ruby | TensorFlow | AWS | Google Cloud | Microsoft Power BI | Git | Docker | LaTeX  
 
 ---
 
@@ -51,7 +55,7 @@ Python | Lean | Ruby | TensorFlow | AWS | Google Cloud | Microsoft Power BI | Gi
 - Applied machine learning for failure prediction on manufacturing lines  
 
 **Additional Experience:**  
-Ametek Aerospace, Skybus (Captain & First Officer), Gill R&D, Eaton Aerospace, BASCO, Aeronautical Engineering teaching roles  
+Ametek Aerospace, Skybus (Captain & First Officer / Air Ambulance Captain), Gill R&D, Eaton Aerospace, BASCO, Aeronautical Engineering teaching roles  
 
 ---
 
@@ -69,14 +73,14 @@ Ametek Aerospace, Skybus (Captain & First Officer), Gill R&D, Eaton Aerospace, B
 
 ## 📂 Projects
 
-### Hybrid Pricing Model
-- A LaTeX project demonstrating a weighted Sigmoid function model implemented in Python for hybrid pricing optimisation  
-- Includes detailed mathematical formulations, code integration, and model performance analysis  
-- [Project Folder → `projects/hybrid_pricing_model`](projects/hybrid_pricing_model)
-
 ### AMP SPC Project
 - A machine learning project focused on statistical process control and predictive analytics  
 - [Project Folder → `projects/amp_spc_project`](projects/amp_spc_project)
+
+### Machine Learning MCMC Model
+- Full MCMC model training pipeline with continuous retraining and visualisations  
+- Includes PDFs, images, and results of predictions vs. actual data  
+- [Project Folder → `projects/machine_learning_mcmc_model`](projects/machine_learning_mcmc_model)
 
 ### Bioinformatics – Squamous Cell Carcinoma
 - Analysis of squamous cell carcinoma using Python & Jupyter Notebook  
@@ -100,5 +104,3 @@ Skiing, walking, cycling, theatre
 ---
 
 **© 2026 Dean Foulds – Data Scientist & ML Engineer**
-
----
