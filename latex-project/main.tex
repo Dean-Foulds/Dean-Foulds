@@ -1,0 +1,99 @@
+\documentclass[12pt,a4paper]{article}
+
+% --- Compiler Setup: Use XeLaTeX/LuaLaTeX ---
+% (Make sure you compile with XeLaTeX or LuaLaTeX)
+
+% --- Packages ---
+\usepackage[utf8]{inputenc}
+\usepackage[a4paper, top=2.5cm, bottom=2.5cm, left=2cm, right=2cm]{geometry}
+\usepackage{fontspec} % Modern font handling
+\usepackage[english]{babel}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{enumitem}
+
+% --- Font Setup ---
+\setsansfont{Liberation Sans} % Use free, cross-platform sans-serif
+\renewcommand{\familydefault}{\sfdefault} % Default to sans-serif
+
+% --- Hyperref Setup ---
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=cyan,
+    citecolor=blue,
+}
+
+% --- Code listing style ---
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codebackground}{rgb}{0.98,0.98,0.98}
+\lstset{
+    language=Python,
+    basicstyle=\ttfamily\small,
+    backgroundcolor=\color{codebackground},
+    keywordstyle=\color{blue},
+    commentstyle=\color{codegray},
+    stringstyle=\color{red},
+    showstringspaces=false,
+    breaklines=true,
+    frame=single,
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    columns=fixed,
+    literate={_}{}{0\discretionary{\_}{}{}}
+}
+
+% --- Title/Author Definitions ---
+\title{Hybrid Risk-Adjusted Pricing and High-Performance Quantitative Valuation Models}
+\author{Dean Foulds}
+\date{\today}
+
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+
+\begin{abstract}
+This study presents a Hybrid Risk-Adjusted Pricing Model designed to improve the accuracy and interpretability of sale price predictions for surplus and life-limited aircraft parts, combined with a high-performance quantitative asset valuation model using JAX. The approach employs a multi-stage architecture:
+
+\textbf{Phase 1 - Risk Quantification (JAX):} A custom, domain-specific Conceptual Risk Model (a weighted Sigmoid function) is implemented using Python and the high-performance numerical library JAX. This component utilises critical operational metrics, including Time Since New (TSN), Cycle Since New (CSN), Time Since Repair (TSR), and Total Time Life (TL), to generate an interpretable and bounded Total Risk Score ($R$). JAX's automatic differentiation capabilities are leveraged to efficiently optimise the model's weights and threshold against historical performance data.
+
+\textbf{Phase 2 - Price Prediction (XGBoost / Regression Models):} The calculated Total Risk Score ($R$) is passed as a crucial, engineered feature to machine learning models including XGBoost (Extreme Gradient Boosting), Random Forest, and LSTM regressors. XGBoost is selected for its robust handling of structured data, ability to capture complex non-linear interactions, and strong predictive performance, ultimately yielding the final market-adjusted sale price.
+
+\textbf{Phase 3 - High-Performance Valuation:} A deep neural network architecture implemented in JAX/Flax estimates Fair Market Value (FMV) using market dynamics and intrinsic features, using JIT compilation and automatic differentiation for maximum computational efficiency.
+
+This methodology provides a reliable, transparent, and scalable tool for aviation inventory management, ensuring that price predictions are systematically informed by the component's inherent operational risk.
+\end{abstract}
+
+\tableofcontents
+\newpage
+
+\section{Introduction}
+\subsection{Background and Motivation}
+The global market for surplus and used aircraft parts is volatile and highly sensitive to component condition. For high-value, life-limited parts—such as those tracked by Time Since New (TSN) and Cycle Since Repair (CSR)—mispricing due to inaccurate risk assessment can lead to significant financial losses or regulatory issues. Current pricing models often rely on generalised historical averages, failing to account for the unique operational stress and remaining useful life (RUL) of individual components. A reliable, objective system is needed to accurately convert complex, domain-specific operational data into a quantifiable risk factor. This project is motivated by the necessity to enhance market efficiency and transparency, ensuring that part pricing directly reflects its true liability and residual value.
+
+\subsection{Problem Statement}
+The central problem is the lack of a standardised, quantitative method to translate highly specific operational data (e.g., Cycle Since New, Time Life) of an aircraft part into a measurable risk feature for use in price prediction. Specifically, the challenge involves: (1) developing an interpretable mathematical model, implemented using JAX, to consolidate multiple operational metrics into a single, bounded Total Risk Score (R); (2) integrating this score as a vital engineered feature into an XGBoost regression model and other ML frameworks; and (3) demonstrating that the hybrid architecture yields superior price prediction accuracy compared to models that exclude this calculated risk. The ultimate goal is to solve the ambiguity in pricing by systematically accounting for the component's inherent operational risk.
+
+\subsection{Research Questions/Objectives}
+\begin{itemize}
+    \item \textbf{Objective 1 (Phase 1):} To successfully implement and optimise a high-performance, differentiable Conceptual Risk Model (CRM) using JAX that translates complex operational metrics into a single Total Risk Score (R).
+    \item \textbf{Objective 2 (Phase 2):} To engineer and calculate a robust Composite APVI using financial time-series data to represent the external economic risk factor.
+    \item \textbf{Objective 3 (Phase 3):} To train and validate time series regression models using the generated Risk Score (R) as a primary feature to achieve superior price prediction accuracy on the held-out test dataset.
+    \item \textbf{Objective 4 (Phase 3-4):} To document the final model architecture and provide a framework for the governance and interpretability of pricing decisions based on the derived risk scores and feature contributions.
+\end{itemize}
+
+\subsection{Hypothesis}
+The hypothesis is that the multi-stage hybrid architecture—which incorporates a rigorously engineered Total Risk Score (R) derived from the JAX Conceptual Risk Model into an XGBoost or similar regression framework—will achieve a statistically significant improvement in price prediction accuracy (as measured by a lower Root Mean Square Error (RMSE) and Mean Absolute Error (MAE)) compared to a control model that only uses the operational features directly. Furthermore, we expect the optimised weights in the JAX model to show that the life-cycle factors (Total Time Life and Cycle Since New) are the most influential predictors of intrinsic risk.
+
+% --- Continue your sections as needed ---
+% Sections like Literature Review, Data, Methodology, Results, etc.
+% You can keep the rest of your previous LaTeX content here
+
+\end{document}
