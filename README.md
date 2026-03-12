@@ -1,7 +1,3 @@
----
-title: Dean Foulds – Data Scientist & ML Engineer
----
-
 # Dean Foulds – Data Scientist & Machine Learning Engineer
 
 📍 London | 📞 07514 298902 | ✉️ deanfoulds@gmail.com  
