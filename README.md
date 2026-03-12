@@ -81,9 +81,11 @@ Skiing, walking, cycling, theatre
 
 ---
 
-📊 **GitHub Stats**  
-Dean Foulds GitHub Stats  
-Top Languages
+📊 **GitHub Stats & Badges**  
+
+![Dean's GitHub Stats](https://github-readme-stats.vercel.app/api?username=Dean-Foulds&show_icons=true&theme=radical)  
+![Top Languages](https://github-readme-stats.vercel.app/api/top-langs/?username=Dean-Foulds&layout=compact&theme=radical)  
+![Profile Views](https://komarev.com/ghpvc/?username=Dean-Foulds&color=brightgreen)
 
 ---
 
