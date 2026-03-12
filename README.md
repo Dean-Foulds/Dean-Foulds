@@ -2,7 +2,7 @@
 
 📍 London | 📞 07514 298902 | ✉️ [deanfoulds@gmail.com](mailto:deanfoulds@gmail.com)
 
-🌐 [Homepage](https://dean-foulds.github.io) | [LinkedIn](https://www.linkedin.com/in/dean-foulds) | [GitHub](https://github.com/Dean-Foulds)
+🌐 [Homepage](https://github.com/Dean-Foulds) | [LinkedIn](https://www.linkedin.com/in/dean-foulds) | [GitHub](https://github.com/Dean-Foulds)
 
 ---
 
