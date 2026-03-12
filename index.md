@@ -1,7 +1,6 @@
-
 # Dean Foulds – Data Scientist & Machine Learning Engineer
 
-📍 London | 📞 07514 298902 | ✉️ deanfoulds@gmail.com  
+📍 London | ✉️ deanfoulds@gmail.com  
 
 🌐 [Homepage](https://github.com/Dean-Foulds) | [LinkedIn](https://www.linkedin.com/in/dean-foulds) | [GitHub](https://github.com/Dean-Foulds)
 
@@ -25,7 +24,7 @@ I have extensive experience with **AWS** and **Google Cloud** platforms, deployi
 ---
 
 ## 💻 Skills & Tech Stack
-Python | TensorFlow | AWS | Google Cloud | Microsoft Power BI | Git | Docker  
+Python | Lean | Ruby | TensorFlow | AWS | Google Cloud | Microsoft Power BI | Git | Docker | Latex  
 
 ---
 
