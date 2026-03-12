@@ -77,13 +77,22 @@ Python | TensorFlow | AWS | Google Cloud | Microsoft Power BI | Git | Docker
 
 ---
 
-📂 **Projects**
+📂 **Projects**  
 
-**Hybrid Pricing Model**
+**Hybrid Pricing Model**  
+- A LaTeX project demonstrating a weighted Sigmoid function model implemented in Python for hybrid pricing optimisation  
+- Includes detailed mathematical formulations, code integration, and model performance analysis  
+- Project folder: `projects/hybrid_pricing_model`  
 
-* A LaTeX project demonstrating a weighted Sigmoid function model implemented in Python for hybrid pricing optimisation
-* Includes detailed mathematical formulations, code integration, and model performance analysis
-* Project folder: `projects/hybrid_pricing_model`
+**AMP SPC Project**  
+- An analytics project focused on Statistical Process Control (SPC) for manufacturing and quality optimisation  
+- Implements predictive models, process monitoring dashboards, and performance metrics tracking  
+- Project folder: `projects/amp_spc_project`  
+
+**Bioinformatics – Squamous Cell Carcinoma Analysis**  
+- Jupyter Notebook analysing **squamous cell carcinoma datasets** using Python for statistical and ML-based insights  
+- Demonstrates data preprocessing, exploratory analysis, and model evaluation for cancer research  
+- View and explore the notebook: [Squamous Cell Carcinoma Analysis](https://github.com/Dean-Foulds/bioinformatics/blob/main/squamous_cell_carcinoma.ipynb)  
 
 *Additional projects will be added as my portfolio grows.*
 
