@@ -24,7 +24,7 @@ I have extensive experience with **AWS** and **Google Cloud** platforms, deployi
 ---
 
 ## 💻 Skills & Tech Stack
-Python | TensorFlow | AWS | Google Cloud | Microsoft Power BI | Git | Docker  
+Python | Lean | Ruby | TensorFlow | AWS | Google Cloud | Microsoft Power BI | Git | Docker | Latex  
 
 ---
 
