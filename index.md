@@ -1,5 +1,5 @@
 
-# Dean Foulds – Data Scientist & Machine Learning Engineer
+## Dean Foulds – Data Scientist & Machine Learning Engineer
 
 📍 London | ✉️ deanfoulds@gmail.com  
 
