@@ -1,11 +1,8 @@
-title: Dean Foulds - ML Portfolio
-description: Data Science and Machine Learning Portfolio with a strong mathematical and scientific background
-baseurl: "" 
-url: "https://Dean-Foulds.github.io"
+title: Dean Foulds – Data Scientist & ML Engineer
+email: deanfoulds@gmail.com
+description: Data Scientist & ML Engineer Portfolio
+baseurl: "" # leave empty for root
+url: "http://localhost:4000"
+
+theme: null # disable default Jekyll themes (minima)
 markdown: kramdown
-kramdown:
-  math_engine: mathjax
-  syntax_highlighter: rouge
-theme: minima
-plugins:
-  - jekyll-feed
