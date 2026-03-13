@@ -79,12 +79,15 @@ Ametek Aerospace, Skybus (Captain & First Officer / Air Ambulance Captain), Gill
 - Includes PDFs, images, and results of predictions vs. actual data  
 - [Project Folder → `projects/machine_learning_mcmc_model`](projects/machine_learning_mcmc_model)
 
+### Risk Algorithm – Aircraft Parts
+- Analysis and risk prediction for aircraft parts using Python & Jupyter Notebook  
+- [Project Folder → `projects/risk_algorithms/ac_part_risk_algorithm`](projects/risk_algorithms/ac_part_risk_algorithm)
+
 ### Bioinformatics – Squamous Cell Carcinoma
 - Analysis of squamous cell carcinoma using Python & Jupyter Notebook  
 - [GitHub Notebook → `bioinformatics/squamous_cell_carcinoma.ipynb`](https://github.com/Dean-Foulds/bioinformatics/blob/main/squamous_cell_carcinoma.ipynb)
 
 *Additional projects will be added as my portfolio grows.*
-
 ---
 
 ## 🎨 Hobbies
