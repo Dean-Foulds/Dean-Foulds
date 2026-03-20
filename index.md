@@ -57,31 +57,31 @@ title: Dean Foulds – Data Scientist & ML Engineer
     <div class="project-card">
       <h3>AMP SPC Project</h3>
       <p>A machine learning project focused on statistical process control and predictive analytics.</p>
-      <a href="projects/amp_spc_project">View Project</a>
+      <a target="_blank" rel="noopener noreferrer" href="projects/amp_spc_project">View Project</a>
     </div>
 
     <div class="project-card">
       <h3>Machine Learning MCMC Model</h3>
       <p>Full MCMC model training pipeline with continuous retraining and visualisations. Includes PDFs, images, and results of predictions vs. actual data.</p>
-      <a href="projects/machine_learning_mcmc_model">View Project</a>
+      <a target="_blank" rel="noopener noreferrer" href="projects/machine_learning_mcmc_model">View Project</a>
     </div>
 
     <div class="project-card">
       <h3>Risk Algorithm – Aircraft Parts</h3>
       <p>Analysis and risk prediction for aircraft parts using Python & Jupyter Notebook.</p>
-      <a href="projects/risk_algorithms/ac_part_risk_algorithm">View Project</a>
+      <a target="_blank" rel="noopener noreferrer" href="projects/risk_algorithms/ac_part_risk_algorithm">View Project</a>
     </div>
 
     <div class="project-card">
       <h3>Bioinformatics – Squamous Cell Carcinoma</h3>
       <p>Analysis of squamous cell carcinoma using Python & Jupyter Notebook.</p>
-      <a href="https://github.com/Dean-Foulds/bioinformatics/blob/main/squamous_cell_carcinoma.ipynb">View Project</a>
+      <a target="_blank" rel="noopener noreferrer" href="https://github.com/Dean-Foulds/bioinformatics/blob/main/squamous_cell_carcinoma.ipynb">View Project</a>
     </div>
 
     <div class="project-card">
       <h3>Lean Theorem Proving</h3>
       <p>Formal mathematics proofs using Lean 4 and Mathlib, covering number theory, algebra, and logical reasoning.</p>
-      <a href="https://github.com/Dean-Foulds/lean_projects">View Project</a>
+      <a target="_blank" rel="noopener noreferrer" href="https://github.com/Dean-Foulds/lean_projects">View Project</a>
     </div>
   </div>
 </section>
