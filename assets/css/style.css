@@ -16,8 +16,10 @@ body {
 header {
   text-align: center;
   padding: 3rem 1rem 2rem 1rem;
-  background: #0d0d1a;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background-image: url("/assets/images/header-bg.jpg");
+  background-size: cover;
+  background-position: center;
+  position: relative;
   color: #fff;
 }
 
