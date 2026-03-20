@@ -68,11 +68,8 @@ title: Dean Foulds – Data Scientist & ML Engineer
 
     <div class="project-card">
       <h3>Risk Algorithm – Aircraft Parts</h3>
-      <p>Analysis and risk prediction for aircraft parts using Python & Jupyter Notebook, with formal mathematical proofs verified in Lean 4.</p>
-      <div style="display:flex; gap:0.5rem; justify-content:center; flex-wrap:wrap;">
-        <a target="_blank" rel="noopener noreferrer" href="https://colab.research.google.com/github/Dean-Foulds/Dean-Foulds/blob/main/projects/risk_algorithms/ac_part_risk_calculation_GARCH/part_risk_algorithm_GARCH.ipynb">Open in Colab</a>
-        <a target="_blank" rel="noopener noreferrer" href="https://github.com/Dean-Foulds/lean_projects/blob/main/LeanProjects/volatility_theory/volatility_theory.pdf">View PDF Proofs</a>
-      </div>
+      <p>Analysis and risk prediction for aircraft parts using Python, JAX, and GARCH modelling, with formal mathematical proofs verified in Lean 4.</p>
+      <a target="_blank" rel="noopener noreferrer" href="projects/risk_algorithms">View Project</a>
     </div>
 
     <div class="project-card">
