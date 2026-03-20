@@ -9,6 +9,6 @@ Includes formal mathematical proofs of the volatility model verified in Lean 4 a
 
 [Open in Google Colab](https://colab.research.google.com/github/Dean-Foulds/Dean-Foulds/blob/main/projects/risk_algorithms/ac_part_risk_calculation_GARCH/part_risk_algorithm_GARCH.ipynb)
 
-[View Formal Proofs PDF](https://github.com/Dean-Foulds/lean_projects/blob/main/LeanProjects/volatility_theory/volatility_theory.pdf)
+<a href="https://github.com/Dean-Foulds/lean_projects/raw/main/LeanProjects/volatility_theory/volatility_theory.pdf" download>Download Formal Proofs PDF</a>
 
 [View Lean Source Code](https://github.com/Dean-Foulds/lean_projects/blob/main/LeanProjects/volatility_theory/volatility_theory.lean)
