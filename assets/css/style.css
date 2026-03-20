@@ -16,31 +16,55 @@ body {
 header {
   text-align: center;
   padding: 3rem 1rem 2rem 1rem;
-  background: linear-gradient(90deg, #6a0dad, #ff00ff, #ff6a00, #4a00e0);
-  background-size: 300% 300%;
-  animation: gradient-move 6s ease infinite;
+  background: #0d0d1a;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   color: #fff;
 }
 
-@keyframes gradient-move {
-  0% {background-position: 0% 50%;}
-  50% {background-position: 100% 50%;}
-  100% {background-position: 0% 50%;}
+header img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 3px solid rgba(255,255,255,0.15);
+  margin-bottom: 1rem;
 }
 
 header h1 {
   font-size: 2.5rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.4rem;
+  background: linear-gradient(90deg, #4b8eff, #a259ff, #ff6eeb);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+header .subtitle {
+  font-size: 1.1rem;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 0.8rem;
+  letter-spacing: 0.5px;
+  background: linear-gradient(90deg, #4b8eff, #a259ff, #ff6eeb);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 header p {
-  font-size: 1.1rem;
-  margin: 0;
+  font-size: 1rem;
+  margin: 0.3rem 0;
+  color: rgba(255,255,255,0.5);
 }
 
 header a {
-  color: #fff;
-  text-decoration: underline;
+  color: rgba(255,255,255,0.6);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+header a:hover {
+  color: #a259ff;
 }
 
 /* ===============================
@@ -56,23 +80,28 @@ header a {
 }
 
 .content-wrapper section {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.04);
   padding: 2rem;
-  border-radius: 12px;
+  border-radius: 16px;
   width: 100%;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  border: 1px solid rgba(255,255,255,0.07);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.3);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .content-wrapper section:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(255,0,255,0.4);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 32px rgba(162, 89, 255, 0.2);
 }
 
 .content-wrapper section h2 {
   text-align: center;
   margin-top: 0;
-  color: #ff8c00;
+  font-size: 1.6rem;
+  background: linear-gradient(90deg, #4b8eff, #a259ff, #ff6eeb);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .content-wrapper section p,
@@ -85,13 +114,13 @@ header a {
    Links
 =============================== */
 a {
-  color: #9b59b6;
+  color: #a259ff;
   text-decoration: none;
   transition: color 0.3s ease;
 }
 
 a:hover {
-  color: #ff00ff;
+  color: #ff6eeb;
 }
 
 /* ===============================
@@ -106,8 +135,9 @@ a:hover {
 }
 
 .project-card {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 16px;
   padding: 1.5rem;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   display: flex;
@@ -116,20 +146,21 @@ a:hover {
 }
 
 .project-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 20px rgba(255, 0, 255, 0.4);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(162, 89, 255, 0.25);
 }
 
 .project-card h3 {
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   margin-bottom: 0.8rem;
-  background: linear-gradient(90deg, #ff00ff, #ff6a00, #4a00e0);
+  background: linear-gradient(90deg, #4b8eff, #a259ff, #ff6eeb);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .project-card p {
-  color: #ccc;
+  color: #aaa;
   font-size: 0.95rem;
   flex-grow: 1;
   margin-bottom: 1rem;
@@ -137,18 +168,19 @@ a:hover {
 
 .project-card a {
   align-self: center;
-  padding: 0.4rem 0.8rem;
-  background: linear-gradient(90deg, #8e2de2, #4a00e0, #ff00ff);
+  padding: 0.45rem 1rem;
+  background: linear-gradient(90deg, #4b8eff, #a259ff);
   color: #fff;
-  border-radius: 6px;
+  border-radius: 8px;
   font-weight: 500;
   text-decoration: none;
+  -webkit-text-fill-color: #fff;
   transition: all 0.3s ease;
 }
 
 .project-card a:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(255,0,255,0.5);
+  box-shadow: 0 6px 16px rgba(162, 89, 255, 0.4);
 }
 
 /* ===============================
@@ -158,11 +190,5 @@ footer {
   text-align: center;
   margin: 3rem 0;
   font-size: 0.9rem;
-  color: #888;
-}
-/* ===============================
-   Emoji Size
-=============================== */
-.card-section h2 {
-  font-size: 1.8rem;
+  color: #555;
 }
