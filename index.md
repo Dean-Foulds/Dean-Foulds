@@ -77,6 +77,12 @@ title: Dean Foulds – Data Scientist & ML Engineer
       <p>Analysis of squamous cell carcinoma using Python & Jupyter Notebook.</p>
       <a href="https://github.com/Dean-Foulds/bioinformatics/blob/main/squamous_cell_carcinoma.ipynb">View Project</a>
     </div>
+
+    <div class="project-card">
+      <h3>Lean Theorem Proving</h3>
+      <p>Formal mathematics proofs using Lean 4 and Mathlib, covering number theory, algebra, and logical reasoning.</p>
+      <a href="https://github.com/Dean-Foulds/lean_projects">View Project</a>
+    </div>
   </div>
 </section>
 
