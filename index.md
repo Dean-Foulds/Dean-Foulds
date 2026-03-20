@@ -6,7 +6,7 @@ title: Dean Foulds – Data Scientist & ML Engineer
 
 
 <section class="card-section">
-  <h2>🚀 About Me</h2>
+  <h2>About Me</h2>
   <p>I am a mathematically rigorous Data Scientist specialising in agentic AI systems and end-to-end machine learning pipelines. My work bridges theoretical mathematics, statistical learning, and practical business impact, consistently delivering functional autonomous systems within 8–12 weeks.</p>
 
   <p>I have extensive experience with AWS and Google Cloud platforms, deploying scalable ML solutions using SageMaker, Vertex AI, and serverless frameworks. My focus is on optimising performance, reducing costs, and translating complex data and algorithms into tangible business results.</p>
