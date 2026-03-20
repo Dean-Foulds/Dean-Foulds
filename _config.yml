@@ -2,7 +2,7 @@ title: Dean Foulds – Data Scientist & ML Engineer
 email: deanfoulds@gmail.com
 description: Data Scientist & ML Engineer Portfolio
 baseurl: "" # leave empty for root
-url: "https://dean-foulds.github.io"
+url: "https://deanfoulds.xyz"
 
 theme: null # disable default Jekyll themes (minima)
 markdown: kramdown
