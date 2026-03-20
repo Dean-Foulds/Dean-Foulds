@@ -69,7 +69,7 @@ title: Dean Foulds – Data Scientist & ML Engineer
     <div class="project-card">
       <h3>Risk Algorithm – Aircraft Parts</h3>
       <p>Analysis and risk prediction for aircraft parts using Python & Jupyter Notebook.</p>
-      <a target="_blank" rel="noopener noreferrer" href="projects/risk_algorithms/ac_part_risk_algorithm">View Project</a>
+      <a target="_blank" rel="noopener noreferrer" href="projects/risk_algorithms">View Project</a>
     </div>
 
     <div class="project-card">
