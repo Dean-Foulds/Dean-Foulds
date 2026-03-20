@@ -109,7 +109,7 @@ header a:hover {
 .content-wrapper section p,
 .content-wrapper section ul,
 .content-wrapper section ol {
-  text-align: center;
+  text-align: left;
 }
 
 /* ===============================
