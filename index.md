@@ -28,30 +28,6 @@ title: Dean Foulds – Data Scientist & ML Engineer
 </section>
 
 <section class="card-section">
-  <h2>🏆 Work Experience Highlights</h2>
-
-  <h3>AJW Aerospace – Data Scientist</h3>
-  <p>Apr 2025 – Present, Sussex</p>
-  <p>Designed and deployed autonomous agent AI systems for rapid business implementation</p>
-  <p>Developed risk algorithms and scenario-based evaluation models</p>
-  <p>Conducted Monte Carlo simulations, DCF analysis, and scenario-based risk assessments</p>
-  <p>Trained MCMC models with continuous retraining for adaptive decision-making</p>
-
-  <h3>ASN Submarine Cables – Data Scientist & ML Engineer</h3>
-  <p>Dec 2023 – Apr 2025, London</p>
-  <p>Converted corrective maintenance to predictive maintenance using ML</p>
-  <p>Developed failure prediction and anomaly detection pipelines using machine vision</p>
-  <p>Led Kaizen and Lean Manufacturing initiatives to improve KPIs and reduce defects</p>
-  <p>Applied DMAIC and 8D problem-solving for continuous process improvement</p>
-
-  <h3>McLaren Racing – Complex Data Analysis</h3>
-  <p>Mar 2020 – Dec 2021, Woking</p>
-  <p>Implemented SPC and predictive models to reduce manufacturing defects</p>
-  <p>Led FMEA and PPAP processes to ensure quality and reliability</p>
-  <p>Applied machine learning for failure prediction on manufacturing lines</p>
-</section>
-
-<section class="card-section">
   <h2>📂 Projects</h2>
   <div class="projects">
     <div class="project-card">
@@ -90,6 +66,30 @@ title: Dean Foulds – Data Scientist & ML Engineer
       <a target="_blank" rel="noopener noreferrer" href="projects/pipelined_perceptron">View Project</a>
     </div>
   </div>
+</section>
+
+<section class="card-section">
+  <h2>🏆 Work Experience Highlights</h2>
+
+  <h3>AJW Aerospace – Data Scientist</h3>
+  <p>Apr 2025 – Present, Sussex</p>
+  <p>Designed and deployed autonomous agent AI systems for rapid business implementation</p>
+  <p>Developed risk algorithms and scenario-based evaluation models</p>
+  <p>Conducted Monte Carlo simulations, DCF analysis, and scenario-based risk assessments</p>
+  <p>Trained MCMC models with continuous retraining for adaptive decision-making</p>
+
+  <h3>ASN Submarine Cables – Data Scientist & ML Engineer</h3>
+  <p>Dec 2023 – Apr 2025, London</p>
+  <p>Converted corrective maintenance to predictive maintenance using ML</p>
+  <p>Developed failure prediction and anomaly detection pipelines using machine vision</p>
+  <p>Led Kaizen and Lean Manufacturing initiatives to improve KPIs and reduce defects</p>
+  <p>Applied DMAIC and 8D problem-solving for continuous process improvement</p>
+
+  <h3>McLaren Racing – Complex Data Analysis</h3>
+  <p>Mar 2020 – Dec 2021, Woking</p>
+  <p>Implemented SPC and predictive models to reduce manufacturing defects</p>
+  <p>Led FMEA and PPAP processes to ensure quality and reliability</p>
+  <p>Applied machine learning for failure prediction on manufacturing lines</p>
 </section>
 
 <section class="card-section">
