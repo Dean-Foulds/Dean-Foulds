@@ -83,6 +83,12 @@ title: Dean Foulds – Data Scientist & ML Engineer
       <p>Formal mathematics proofs using Lean 4 and Mathlib, covering number theory, algebra, and logical reasoning.</p>
       <a target="_blank" rel="noopener noreferrer" href="https://github.com/Dean-Foulds/lean_projects">View Project</a>
     </div>
+
+    <div class="project-card">
+      <h3>Pipelined Binary Perceptron</h3>
+      <p>A 4-stage pipelined McCulloch-Pitts neuron implemented directly in silicon on a Tiny Tapeout tile. The fundamental atom of AI — no CPU, no software, just logic gates.</p>
+      <a target="_blank" rel="noopener noreferrer" href="projects/pipelined_perceptron">View Project</a>
+    </div>
   </div>
 </section>
 
