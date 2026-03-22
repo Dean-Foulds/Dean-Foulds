@@ -61,8 +61,8 @@ title: Dean Foulds – Data Scientist & ML Engineer
     </div>
 
     <div class="project-card">
-      <h3>Pipelined Binary Perceptron</h3>
-      <p>A 4-stage pipelined McCulloch-Pitts neuron implemented directly in silicon on a Tiny Tapeout tile. The fundamental atom of AI — no CPU, no software, just logic gates.</p>
+      <h3>16-Neuron Binary Neural Network</h3>
+      <p>A full BNN inference layer in silicon on Tiny Tapeout — 16 binary perceptrons classifying an 8-bit input simultaneously in a single clock cycle. No CPU, no software, just logic gates.</p>
       <a target="_blank" rel="noopener noreferrer" href="projects/pipelined_perceptron">View Project</a>
     </div>
   </div>
