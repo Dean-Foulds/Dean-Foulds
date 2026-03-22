@@ -57,7 +57,7 @@ title: Dean Foulds – Data Scientist & ML Engineer
     <div class="project-card">
       <h3>Lean Theorem Proving</h3>
       <p>Formal mathematics proofs using Lean 4 and Mathlib, covering number theory, algebra, and logical reasoning.</p>
-      <a target="_blank" rel="noopener noreferrer" href="https://github.com/Dean-Foulds/lean_projects">View Project</a>
+      <a target="_blank" rel="noopener noreferrer" href="projects/lean_projects">View Project</a>
     </div>
 
     <div class="project-card">
