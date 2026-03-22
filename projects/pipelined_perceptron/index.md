@@ -1,39 +1,62 @@
 ---
 layout: default
-title: 4-Stage Pipelined Binary Perceptron
+title: 16-Neuron Binary Neural Network
 ---
 
-## 4-Stage Pipelined Binary Perceptron
+## 16-Neuron Binary Neural Network
 
-A hardware implementation of the McCulloch-Pitts neuron — the 1943 mathematical model that started the entire field of neural networks — built as a 4-stage pipelined digital circuit on a **Tiny Tapeout** tile. No CPU, no software, no operating system. Just logic gates switching at the speed of electrons.
+A **Binary Neural Network (BNN) inference layer** implemented directly in silicon on a Tiny Tapeout tile. 16 independent binary perceptron neurons each classify the same 8-bit input vector simultaneously, producing a 16-bit output in a single clock cycle — with no CPU, no software, no operating system.
 
-The perceptron classifies an 8-bit input vector every clock cycle after an initial 4-cycle warmup latency.
+### The Mathematical Model
 
-### How it works
-
-The circuit computes a weighted sum of binary inputs and compares it to a programmable threshold:
+Each neuron `n` computes:
 ```
-y = 1  if  Σ(wi · xi) >= θ
-y = 0  otherwise
+y[n] = 1   if   Σ( w[n][i] AND x[i] ) >= θ[n]
+y[n] = 0   otherwise
 ```
 
-Since all values are binary, multiplication reduces to a logical AND — the simplest possible gate on silicon.
+Because all values are binary, multiplication reduces to a logical AND — orders of magnitude cheaper in silicon area and power than floating-point arithmetic.
 
-### The 4 Pipeline Stages
+### Inside Each Neuron
 
-**Stage 1 — Input Latch:** 8 input bits are frozen into flip-flops on the rising clock edge.
+**Stage 1 — AND Array:** Each input bit is ANDed with its corresponding weight bit in parallel across 8 gates.
 
-**Stage 2 — AND Array:** Each input bit is ANDed with its corresponding weight bit in parallel.
+**Stage 2 — Adder Tree (Popcount):** The 8 product bits are summed using a tree of half-adders and full-adders, producing a 4-bit count S[n] between 0 and 8.
 
-**Stage 3 — Adder Tree:** Eight 0/1 results are summed using a tree of half-adders across 3 levels, producing a 4-bit count from 0–8.
+**Stage 3 — Threshold Comparator:** If S[n] >= θ[n], the neuron fires. A single bit — yes or no.
 
-**Stage 4 — Threshold Comparator:** If sum >= θ, the neuron fires (fire = 1). This is the classification decision.
+### Why 16 Neurons in Parallel?
 
-After the 4-cycle warmup, a new result is produced on every single clock tick.
+All 16 neurons share the same 8-bit input bus but each has its own independent weight register (8 bits) and threshold register (4 bits). Each can be programmed to recognise a different pattern. The result is a 16-bit output vector answering 16 different yes/no questions about the input simultaneously.
 
 ### Why this is genuinely AI
 
-This is the fundamental atom of machine intelligence. Every modern AI model — from GPT to image classifiers — is built from billions of these exact computations, implemented here directly in silicon.
+This implements the McCulloch-Pitts neuron (1943) — the mathematical model that founded neural networks. Every modern AI system is built from billions of this computation. BNNs are an active research area for ultra-low-power AI inference at the edge, where AND+popcount replaces expensive multiply-accumulate operations.
+
+### Weights can be trained in Python
+```python
+from perceptron_trainer import train_perceptron, generate_load_instructions
+import numpy as np
+
+X = np.random.randint(0, 2, (200, 8))
+y = (X.sum(axis=1) > 4).astype(int)
+
+weights, threshold, _ = train_perceptron(X, y, epochs=100)
+generate_load_instructions(weights, threshold)
+```
+
+### Pin Mapping
+
+| Pin | Direction | Function |
+|-----|-----------|----------|
+| `clk` | in | System clock |
+| `rst_n` | in | Active-low reset |
+| `ui_in[7:0]` | in | Input features or load data |
+| `uio_in[0]` | in | Mode: 0=load, 1=infer |
+| `uio_in[1]` | in | Target: 0=weights, 1=thresholds |
+| `uio_in[5:2]` | in | Neuron select 0–15 |
+| `uo_out[7:0]` | out | Fire signals neurons 0–7 |
+| `uio_out[7:0]` | out | Fire signals neurons 8–15 |
 
 [View on GitHub](https://github.com/Dean-Foulds/ttsky-wokwi-template){:target="_blank" rel="noopener noreferrer"}
 
