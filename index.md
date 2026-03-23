@@ -104,9 +104,3 @@ title: Dean Foulds – Data Scientist & ML Engineer
   <p>Skiing, walking, cycling, theatre</p>
 </section>
 
-<section class="card-section">
-  <h2>📊 GitHub Stats & Badges</h2>
-  <img src="https://github-readme-stats.vercel.app/api?username=Dean-Foulds&show_icons=true&theme=radical" alt="Dean's GitHub Stats">
-  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=Dean-Foulds&layout=compact&theme=radical" alt="Top Languages">
-  <img src="https://komarev.com/ghpvc/?username=Dean-Foulds&color=brightgreen" alt="Profile Views">
-</section>
