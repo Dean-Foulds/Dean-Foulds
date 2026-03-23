@@ -60,6 +60,13 @@ title: Dean Foulds – Data Scientist & ML Engineer
       <a target="_blank" rel="noopener noreferrer" href="projects/lean_projects">View Project</a>
     </div>
 
+
+    <div class="project-card">
+      <h3>Systolic BNN Accelerator (V2)</h3>
+      <p>Redesigned BNN chip for Tiny Tapeout — XNOR dot product, systolic engine, signed bias, hardware feature expansion, and balanced popcount tree. Same 16 neurons, fraction of the silicon.</p>
+      <a target="_blank" rel="noopener noreferrer" href="projects/bnn_accelerator">View Project</a>
+    </div>
+
     <div class="project-card">
       <h3>16-Neuron Binary Neural Network</h3>
       <p>A full BNN inference layer in silicon on Tiny Tapeout — 16 binary perceptrons classifying an 8-bit input simultaneously in a single clock cycle. No CPU, no software, just logic gates.</p>
