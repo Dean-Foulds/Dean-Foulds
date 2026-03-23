@@ -88,18 +88,20 @@ Ametek Aerospace, Skybus (Captain & First Officer / Air Ambulance Captain), Gill
 
 *Additional projects will be added as my portfolio grows.*
 
----
 
-## 🎨 Hobbies
-Skiing, walking, cycling, theatre  
-
----
 
 ## 📊 GitHub Stats & Badges  
 
 ![Dean's GitHub Stats](https://github-readme-stats.vercel.app/api?username=Dean-Foulds&show_icons=true&theme=radical)  
 ![Top Languages](https://github-readme-stats.vercel.app/api/top-langs/?username=Dean-Foulds&layout=compact&theme=radical)  
 ![Profile Views](https://komarev.com/ghpvc/?username=Dean-Foulds&color=brightgreen)  
+
+---
+
+---
+
+## 🎨 Hobbies
+Skiing, walking, cycling, theatre  
 
 ---
 
