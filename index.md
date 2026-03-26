@@ -96,13 +96,24 @@ title: Dean Foulds – Data Scientist & ML Engineer
 
 <section class="card-section">
   <h2>📊 GitHub Stats & Badges</h2>
-  <a href="https://github.com/Dean-Foulds" target="_blank" rel="noopener noreferrer">
-    <img src="https://github-readme-stats.vercel.app/api?username=Dean-Foulds&show_icons=true&theme=radical&cache_seconds=86400" alt="Dean's GitHub Stats" style="max-width:100%;">
-  </a>
-  <a href="https://github.com/Dean-Foulds" target="_blank" rel="noopener noreferrer">
-    <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=Dean-Foulds&layout=compact&theme=radical&cache_seconds=86400" alt="Top Languages" style="max-width:100%;">
-  </a>
-  <p><a href="https://github.com/Dean-Foulds" target="_blank" rel="noopener noreferrer">View GitHub Profile</a></p>
+  <p>
+    <a href="https://github.com/Dean-Foulds" target="_blank" rel="noopener noreferrer">
+      <img src="https://img.shields.io/github/followers/Dean-Foulds?label=Followers&style=for-the-badge&color=a259ff&logo=github" alt="GitHub Followers">
+    </a>
+    <a href="https://github.com/Dean-Foulds?tab=repositories" target="_blank" rel="noopener noreferrer">
+      <img src="https://img.shields.io/badge/Repos-Public-4b8eff?style=for-the-badge&logo=github" alt="Public Repos">
+    </a>
+    <a href="https://github.com/Dean-Foulds/lean_projects" target="_blank" rel="noopener noreferrer">
+      <img src="https://img.shields.io/badge/Lean_4-Theorem_Proving-ff6eeb?style=for-the-badge" alt="Lean 4">
+    </a>
+    <a href="https://github.com/Dean-Foulds/ttsky-wokwi-template" target="_blank" rel="noopener noreferrer">
+      <img src="https://img.shields.io/badge/Tiny_Tapeout-Silicon_AI-3fb950?style=for-the-badge" alt="Tiny Tapeout">
+    </a>
+    <a href="https://deanfoulds.xyz" target="_blank" rel="noopener noreferrer">
+      <img src="https://img.shields.io/badge/Portfolio-deanfoulds.xyz-f0883e?style=for-the-badge" alt="Portfolio">
+    </a>
+  </p>
+  <p><a href="https://github.com/Dean-Foulds" target="_blank" rel="noopener noreferrer">View GitHub Profile →</a></p>
 </section>
 
 <section class="card-section">
