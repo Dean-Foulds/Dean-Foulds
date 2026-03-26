@@ -96,9 +96,13 @@ title: Dean Foulds – Data Scientist & ML Engineer
 
 <section class="card-section">
   <h2>📊 GitHub Stats & Badges</h2>
-  <img src="https://github-readme-stats.vercel.app/api?username=Dean-Foulds&show_icons=true&theme=radical" alt="Dean's GitHub Stats">
-  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=Dean-Foulds&layout=compact&theme=radical" alt="Top Languages">
-  <img src="https://komarev.com/ghpvc/?username=Dean-Foulds&color=brightgreen" alt="Profile Views">
+  <a href="https://github.com/Dean-Foulds" target="_blank" rel="noopener noreferrer">
+    <img src="https://github-readme-stats.vercel.app/api?username=Dean-Foulds&show_icons=true&theme=radical&cache_seconds=86400" alt="Dean's GitHub Stats" style="max-width:100%;">
+  </a>
+  <a href="https://github.com/Dean-Foulds" target="_blank" rel="noopener noreferrer">
+    <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=Dean-Foulds&layout=compact&theme=radical&cache_seconds=86400" alt="Top Languages" style="max-width:100%;">
+  </a>
+  <p><a href="https://github.com/Dean-Foulds" target="_blank" rel="noopener noreferrer">View GitHub Profile</a></p>
 </section>
 
 <section class="card-section">
