@@ -3,14 +3,10 @@ layout: default
 title: Dean Foulds – Data Scientist & ML Engineer
 ---
 
-
-
 <section class="card-section">
-  <h2>🚀 About Me</h2>
+  <h2>About Me</h2>
   <p>I am a mathematically rigorous Data Scientist specialising in agentic AI systems and end-to-end machine learning pipelines. My work bridges theoretical mathematics, statistical learning, and practical business impact, consistently delivering functional autonomous systems within 8–12 weeks.</p>
-
   <p>I have extensive experience with AWS and Google Cloud platforms, deploying scalable ML solutions using SageMaker, Vertex AI, and serverless frameworks. My focus is on optimising performance, reducing costs, and translating complex data and algorithms into tangible business results.</p>
-
   <p>Key Areas of Expertise:</p>
   <p>Agentic AI & autonomous system design</p>
   <p>Statistical learning theory & optimisation</p>
@@ -25,6 +21,53 @@ title: Dean Foulds – Data Scientist & ML Engineer
 <section class="card-section">
   <h2>💻 Skills & Tech Stack</h2>
   <p>Python | Lean | Ruby | TensorFlow | AWS | Google Cloud | Microsoft Power BI | Git | Docker | LaTeX</p>
+</section>
+
+<section class="card-section">
+  <h2>📂 Projects</h2>
+  <div class="projects">
+    <div class="project-card">
+      <h3>AMP SPC Project</h3>
+      <p>A machine learning project focused on statistical process control and predictive analytics.</p>
+      <a target="_blank" rel="noopener noreferrer" href="projects/amp_spc_project">View Project</a>
+    </div>
+
+    <div class="project-card">
+      <h3>Machine Learning MCMC Model</h3>
+      <p>Full MCMC model training pipeline with continuous retraining and visualisations. Includes PDFs, images, and results of predictions vs. actual data.</p>
+      <a target="_blank" rel="noopener noreferrer" href="projects/machine_learning_mcmc_model">View Project</a>
+    </div>
+
+    <div class="project-card">
+      <h3>Risk Algorithm – Aircraft Parts</h3>
+      <p>Analysis and risk prediction for aircraft parts using Python, JAX, and GARCH modelling, with formal mathematical proofs verified in Lean 4.</p>
+      <a target="_blank" rel="noopener noreferrer" href="projects/risk_algorithms">View Project</a>
+    </div>
+
+    <div class="project-card">
+      <h3>Bioinformatics – Squamous Cell Carcinoma</h3>
+      <p>Analysis of squamous cell carcinoma using Python & Jupyter Notebook.</p>
+      <a target="_blank" rel="noopener noreferrer" href="https://github.com/Dean-Foulds/bioinformatics/blob/main/squamous_cell_carcinoma.ipynb">View Project</a>
+    </div>
+
+    <div class="project-card">
+      <h3>Lean Theorem Proving</h3>
+      <p>Formal mathematics proofs using Lean 4 and Mathlib, covering number theory, algebra, and logical reasoning.</p>
+      <a target="_blank" rel="noopener noreferrer" href="projects/lean_projects">View Project</a>
+    </div>
+
+    <div class="project-card">
+      <h3>Systolic BNN Accelerator (V2)</h3>
+      <p>Redesigned BNN chip for Tiny Tapeout — XNOR dot product, systolic engine, signed bias, hardware feature expansion, and balanced popcount tree. Same 16 neurons, fraction of the silicon.</p>
+      <a target="_blank" rel="noopener noreferrer" href="projects/bnn_accelerator">View Project</a>
+    </div>
+
+    <div class="project-card">
+      <h3>16-Neuron Binary Neural Network</h3>
+      <p>A full BNN inference layer in silicon on Tiny Tapeout — 16 binary perceptrons classifying an 8-bit input simultaneously in a single clock cycle. No CPU, no software, just logic gates.</p>
+      <a target="_blank" rel="noopener noreferrer" href="projects/pipelined_perceptron">View Project</a>
+    </div>
+  </div>
 </section>
 
 <section class="card-section">
@@ -52,37 +95,6 @@ title: Dean Foulds – Data Scientist & ML Engineer
 </section>
 
 <section class="card-section">
-  <h2>📂 Projects</h2>
-  <div class="projects">
-    <div class="project-card">
-      <h3>AMP SPC Project</h3>
-      <p>A machine learning project focused on statistical process control and predictive analytics.</p>
-      <a href="projects/amp_spc_project">View Project</a>
-    </div>
-
-    <div class="project-card">
-      <h3>Machine Learning MCMC Model</h3>
-      <p>Full MCMC model training pipeline with continuous retraining and visualisations. Includes PDFs, images, and results of predictions vs. actual data.</p>
-      <a href="projects/machine_learning_mcmc_model">View Project</a>
-    </div>
-
-    <div class="project-card">
-      <h3>Risk Algorithm – Aircraft Parts</h3>
-      <p>Analysis and risk prediction for aircraft parts using Python & Jupyter Notebook.</p>
-      <a href="projects/risk_algorithms/ac_part_risk_algorithm">View Project</a>
-    </div>
-
-    <div class="project-card">
-      <h3>Bioinformatics – Squamous Cell Carcinoma</h3>
-      <p>Analysis of squamous cell carcinoma using Python & Jupyter Notebook.</p>
-      <a href="https://github.com/Dean-Foulds/bioinformatics/blob/main/squamous_cell_carcinoma.ipynb">View Project</a>
-    </div>
-  </div>
-</section>
-
-
-
-<section class="card-section">
   <h2>📊 GitHub Stats & Badges</h2>
   <img src="https://github-readme-stats.vercel.app/api?username=Dean-Foulds&show_icons=true&theme=radical" alt="Dean's GitHub Stats">
   <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=Dean-Foulds&layout=compact&theme=radical" alt="Top Languages">
@@ -93,9 +105,3 @@ title: Dean Foulds – Data Scientist & ML Engineer
   <h2>🎨 Hobbies</h2>
   <p>Skiing, walking, cycling, theatre, golf</p>
 </section>
-
-
-
-<footer>
-  © 2026 Dean Foulds – Data Scientist & ML Engineer
-</footer>
