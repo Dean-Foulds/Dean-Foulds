@@ -96,24 +96,58 @@ title: Dean Foulds – Data Scientist & ML Engineer
 
 <section class="card-section">
   <h2>📊 GitHub Stats & Badges</h2>
-  <p>
-    <a href="https://github.com/Dean-Foulds" target="_blank" rel="noopener noreferrer">
-      <img src="https://img.shields.io/github/followers/Dean-Foulds?label=Followers&style=for-the-badge&color=a259ff&logo=github" alt="GitHub Followers">
-    </a>
-    <a href="https://github.com/Dean-Foulds?tab=repositories" target="_blank" rel="noopener noreferrer">
-      <img src="https://img.shields.io/badge/Repos-Public-4b8eff?style=for-the-badge&logo=github" alt="Public Repos">
-    </a>
-    <a href="https://github.com/Dean-Foulds/lean_projects" target="_blank" rel="noopener noreferrer">
-      <img src="https://img.shields.io/badge/Lean_4-Theorem_Proving-ff6eeb?style=for-the-badge" alt="Lean 4">
-    </a>
-    <a href="https://github.com/Dean-Foulds/ttsky-wokwi-template" target="_blank" rel="noopener noreferrer">
-      <img src="https://img.shields.io/badge/Tiny_Tapeout-Silicon_AI-3fb950?style=for-the-badge" alt="Tiny Tapeout">
-    </a>
-    <a href="https://deanfoulds.xyz" target="_blank" rel="noopener noreferrer">
-      <img src="https://img.shields.io/badge/Portfolio-deanfoulds.xyz-f0883e?style=for-the-badge" alt="Portfolio">
-    </a>
-  </p>
-  <p><a href="https://github.com/Dean-Foulds" target="_blank" rel="noopener noreferrer">View GitHub Profile →</a></p>
+
+  <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:1.5rem;">
+    <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(75,142,255,0.4);border-radius:8px;padding:8px 14px;display:flex;align-items:center;gap:8px;">
+      <span style="width:8px;height:8px;border-radius:50%;background:#a259ff;display:inline-block;flex-shrink:0;"></span>
+      <span style="font-size:13px;color:#C9D1D9;">Python</span>
+    </div>
+    <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(75,142,255,0.4);border-radius:8px;padding:8px 14px;display:flex;align-items:center;gap:8px;">
+      <span style="width:8px;height:8px;border-radius:50%;background:#4b8eff;display:inline-block;flex-shrink:0;"></span>
+      <span style="font-size:13px;color:#C9D1D9;">Lean 4</span>
+    </div>
+    <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(75,142,255,0.4);border-radius:8px;padding:8px 14px;display:flex;align-items:center;gap:8px;">
+      <span style="width:8px;height:8px;border-radius:50%;background:#ff6eeb;display:inline-block;flex-shrink:0;"></span>
+      <span style="font-size:13px;color:#C9D1D9;">Verilog / HDL</span>
+    </div>
+    <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(75,142,255,0.4);border-radius:8px;padding:8px 14px;display:flex;align-items:center;gap:8px;">
+      <span style="width:8px;height:8px;border-radius:50%;background:#3fb950;display:inline-block;flex-shrink:0;"></span>
+      <span style="font-size:13px;color:#C9D1D9;">JAX / NumPyro</span>
+    </div>
+    <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(75,142,255,0.4);border-radius:8px;padding:8px 14px;display:flex;align-items:center;gap:8px;">
+      <span style="width:8px;height:8px;border-radius:50%;background:#f0883e;display:inline-block;flex-shrink:0;"></span>
+      <span style="font-size:13px;color:#C9D1D9;">LaTeX</span>
+    </div>
+    <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(75,142,255,0.4);border-radius:8px;padding:8px 14px;display:flex;align-items:center;gap:8px;">
+      <span style="width:8px;height:8px;border-radius:50%;background:#F85149;display:inline-block;flex-shrink:0;"></span>
+      <span style="font-size:13px;color:#C9D1D9;">TensorFlow</span>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;">
+    <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(162,89,255,0.4);border-radius:12px;padding:1.2rem;box-shadow:0 4px 15px rgba(0,0,0,0.3);">
+      <p style="font-size:11px;color:#8B949E;margin:0 0 4px;text-transform:uppercase;letter-spacing:0.5px;">Commits (2026)</p>
+      <p style="font-size:22px;font-weight:700;background:linear-gradient(90deg,#4b8eff,#a259ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:0;">500+</p>
+      <p style="font-size:11px;color:#8B949E;margin:4px 0 0;">across all repos</p>
+    </div>
+    <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,110,235,0.4);border-radius:12px;padding:1.2rem;box-shadow:0 4px 15px rgba(0,0,0,0.3);">
+      <p style="font-size:11px;color:#8B949E;margin:0 0 4px;text-transform:uppercase;letter-spacing:0.5px;">Lean Proofs</p>
+      <p style="font-size:22px;font-weight:700;background:linear-gradient(90deg,#a259ff,#ff6eeb);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:0;">30+</p>
+      <p style="font-size:11px;color:#8B949E;margin:4px 0 0;">machine-verified</p>
+    </div>
+    <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(63,185,80,0.4);border-radius:12px;padding:1.2rem;box-shadow:0 4px 15px rgba(0,0,0,0.3);">
+      <p style="font-size:11px;color:#8B949E;margin:0 0 4px;text-transform:uppercase;letter-spacing:0.5px;">Tiny Tapeout</p>
+      <p style="font-size:22px;font-weight:700;background:linear-gradient(90deg,#3fb950,#4b8eff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:0;">2 chips</p>
+      <p style="font-size:11px;color:#8B949E;margin:4px 0 0;">in silicon</p>
+    </div>
+    <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(240,136,62,0.4);border-radius:12px;padding:1.2rem;box-shadow:0 4px 15px rgba(0,0,0,0.3);">
+      <p style="font-size:11px;color:#8B949E;margin:0 0 4px;text-transform:uppercase;letter-spacing:0.5px;">Experience</p>
+      <p style="font-size:22px;font-weight:700;background:linear-gradient(90deg,#f0883e,#a259ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:0;">10+ yrs</p>
+      <p style="font-size:11px;color:#8B949E;margin:4px 0 0;">ML & data science</p>
+    </div>
+  </div>
+
+  <p style="margin-top:1.2rem;"><a target="_blank" rel="noopener noreferrer" href="https://github.com/Dean-Foulds">View GitHub Profile →</a></p>
 </section>
 
 <section class="card-section">
