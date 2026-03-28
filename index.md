@@ -145,6 +145,11 @@ title: Dean Foulds – Data Scientist & ML Engineer
       <p style="font-size:22px;font-weight:700;background:linear-gradient(90deg,#f0883e,#a259ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:0;">10+ yrs</p>
       <p style="font-size:11px;color:#8B949E;margin:4px 0 0;">ML & data science</p>
     </div>
+    <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(63,185,80,0.4);border-radius:12px;padding:1.2rem;box-shadow:0 4px 15px rgba(0,0,0,0.3);">
+      <p style="font-size:11px;color:#8B949E;margin:0 0 4px;text-transform:uppercase;letter-spacing:0.5px;">Profile Views</p>
+      <p style="font-size:22px;font-weight:700;background:linear-gradient(90deg,#3fb950,#4b8eff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:0;"><img src="https://komarev.com/ghpvc/?username=Dean-Foulds&style=flat&color=3fb950&label=" alt="views" style="vertical-align:middle;height:28px;"></p>
+      <p style="font-size:11px;color:#8B949E;margin:4px 0 0;">portfolio visits</p>
+    </div>
   </div>
 
   <p style="margin-top:1.2rem;"><a target="_blank" rel="noopener noreferrer" href="https://github.com/Dean-Foulds">View GitHub Profile →</a></p>
