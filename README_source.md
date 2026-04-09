@@ -90,7 +90,7 @@ Ametek Aerospace, Skybus (Captain & First Officer / Air Ambulance Captain), Gill
 - Flask web app implementing the τ²-bench framework for evaluating LLM agent reliability  
 - Runs LLM-vs-LLM conversations across Airline, Retail, and Telecom domains with live streaming  
 - Computes Pass^k scores to reveal true reliability under repeated use  
-- [GitHub → `Dean-Foulds/tau2_demo`](https://github.com/Dean-Foulds/tau2_demo)
+- [Live demo → `projects/tau2_demo`](projects/tau2_demo) · [GitHub source](https://github.com/Dean-Foulds/tau2_demo)
 
 *Additional projects will be added as my portfolio grows.*
 

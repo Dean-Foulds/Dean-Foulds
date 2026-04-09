@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>τ²-bench Demo — LLM Reliability Evaluation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:        #07090f;
+  --bg2:       #0d1018;
+  --bg3:       #131622;
+  --border:    #1a1e30;
+  --gold:      #e8b84b;
+  --gold-dim:  rgba(232,184,75,0.12);
+  --cyan:      #3dd9c0;
+  --cyan-dim:  rgba(61,217,192,0.1);
+  --pink:      #e8526a;
+  --pink-dim:  rgba(232,82,106,0.1);
+  --blue:      #5b8dee;
+  --lav:       #9d7fe8;
+  --text:      #d8dbe8;
+  --muted:     #5a6080;
+  --pass:      #3dd9c0;
+  --fail:      #e8526a;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.6;overflow:hidden}
+.app{display:grid;grid-template-columns:320px 1fr;grid-template-rows:52px 1fr;height:100vh}
+.topbar{grid-column:1/-1;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;gap:16px;z-index:10}
+.logo{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;letter-spacing:-0.03em;color:var(--gold)}
+.logo span{color:var(--text);font-weight:400}
+.topbar-badge{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;background:var(--gold-dim);color:var(--gold);padding:3px 10px;border-radius:4px;border:1px solid rgba(232,184,75,0.2)}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:12px}
+.status-pill{font-family:'DM Mono',monospace;font-size:11px;padding:4px 12px;border-radius:20px;border:1px solid var(--border);color:var(--muted)}
+.status-pill.complete{border-color:var(--pass);color:var(--pass)}
+.sidebar{background:var(--bg2);border-right:1px solid var(--border);overflow-y:auto;display:flex;flex-direction:column}
+.sidebar-section{padding:16px;border-bottom:1px solid var(--border)}
+.section-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+label{display:block;font-size:12px;color:var(--muted);margin-bottom:5px}
+input,select{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:8px 10px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;transition:border-color 0.15s}
+input:focus,select:focus{border-color:var(--gold)}
+.form-row{margin-bottom:12px}
+select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235a6080' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center}
+select option{background:var(--bg2)}
+.domain-grid{display:flex;flex-direction:column;gap:6px;margin-top:4px}
+.domain-card{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;cursor:pointer;transition:all 0.15s;display:flex;align-items:center;gap:10px}
+.domain-card:hover{border-color:var(--gold);background:#131622}
+.domain-card.selected{border-color:var(--gold);background:var(--gold-dim)}
+.domain-icon{font-size:18px;flex-shrink:0}
+.domain-info{flex:1;min-width:0}
+.domain-name{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.domain-meta{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted)}
+.task-list{display:flex;flex-direction:column;gap:4px;margin-top:4px}
+.task-item{display:flex;align-items:flex-start;gap:8px;padding:8px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;cursor:pointer;transition:border-color 0.15s}
+.task-item input[type=checkbox]{width:14px;height:14px;flex-shrink:0;margin-top:2px;accent-color:var(--gold);cursor:pointer}
+.task-item-info{flex:1}
+.task-item-title{font-size:12px;font-weight:500}
+.task-item-tags{display:flex;gap:4px;margin-top:3px;flex-wrap:wrap}
+.tag{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.1em;padding:1px 6px;border-radius:3px;border:1px solid}
+.tag.easy{color:#3dd9c0;border-color:rgba(61,217,192,0.3);background:rgba(61,217,192,0.08)}
+.tag.medium{color:var(--gold);border-color:rgba(232,184,75,0.3);background:var(--gold-dim)}
+.tag.hard{color:var(--pink);border-color:rgba(232,82,106,0.3);background:var(--pink-dim)}
+.tag.adversarial{color:var(--lav);border-color:rgba(157,127,232,0.3);background:rgba(157,127,232,0.08)}
+.demo-note{background:rgba(61,217,192,0.06);border:1px solid rgba(61,217,192,0.25);border-radius:8px;padding:12px;font-size:12px;color:var(--cyan);line-height:1.5}
+.demo-note a{color:var(--gold);text-decoration:none}
+.demo-note a:hover{text-decoration:underline}
+.main{display:grid;grid-template-rows:1fr 240px;overflow:hidden}
+.workspace{overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:16px}
+.results-panel{background:var(--bg2);border-top:1px solid var(--border);padding:16px 20px;overflow-y:auto}
+.task-block{background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.task-header{padding:12px 16px;background:var(--bg3);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.task-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700}
+.trial-tabs{display:flex;gap:4px;margin-left:auto}
+.trial-tab{font-family:'DM Mono',monospace;font-size:10px;padding:3px 8px;border-radius:4px;border:1px solid var(--border);cursor:pointer;background:transparent;color:var(--muted);transition:all 0.15s}
+.trial-tab.active{border-color:var(--gold);color:var(--gold);background:var(--gold-dim)}
+.trial-tab.pass{border-color:var(--pass);color:var(--pass)}
+.trial-tab.fail{border-color:var(--fail);color:var(--fail)}
+.conversation{padding:12px;display:flex;flex-direction:column;gap:8px;max-height:440px;overflow-y:auto;scroll-behavior:smooth}
+.msg{display:flex;gap:10px;align-items:flex-start}
+.msg-avatar{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;font-family:'DM Mono',monospace;font-weight:500;margin-top:2px}
+.msg-avatar.user{background:var(--gold-dim);color:var(--gold);border:1px solid rgba(232,184,75,0.2)}
+.msg-avatar.agent{background:var(--cyan-dim);color:var(--cyan);border:1px solid rgba(61,217,192,0.2)}
+.msg-avatar.system{background:rgba(157,127,232,0.1);color:var(--lav);border:1px solid rgba(157,127,232,0.2)}
+.msg-body{flex:1;min-width:0}
+.msg-role{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+.msg-text{font-size:13px;line-height:1.55;color:var(--text)}
+.msg-text.user-style{color:#c8ccdc}
+.tool-call{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:8px 12px;margin:6px 0;font-family:'DM Mono',monospace;font-size:11px}
+.tool-header{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.tool-name{color:var(--cyan);font-weight:500}
+.tool-status{font-size:9px;padding:2px 6px;border-radius:3px}
+.tool-status.ok{background:rgba(61,217,192,0.1);color:var(--cyan)}
+.tool-body{color:var(--muted);font-size:10px;white-space:pre-wrap;overflow:hidden;max-height:60px}
+.progress-bar{height:2px;background:var(--border);border-radius:1px;overflow:hidden;margin:8px 0}
+.progress-fill{height:100%;background:var(--gold);transition:width 0.3s ease}
+.results-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:12px}
+.metric-card{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px}
+.metric-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.metric-value{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;line-height:1}
+.metric-value.good{color:var(--pass)}
+.metric-value.mid{color:var(--gold)}
+.metric-value.bad{color:var(--fail)}
+.metric-sub{font-size:11px;color:var(--muted);margin-top:3px}
+.passk-row{display:flex;gap:6px;align-items:center;margin-top:8px}
+.passk-label{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);width:28px;flex-shrink:0}
+.passk-bar-wrap{flex:1;height:14px;background:var(--bg3);border-radius:3px;overflow:hidden}
+.passk-bar{height:100%;transition:width 0.6s ease;border-radius:3px}
+.passk-val{font-family:'DM Mono',monospace;font-size:10px;color:var(--text);width:36px;text-align:right;flex-shrink:0}
+.results-table{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px}
+.results-table th{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);padding:6px 8px;text-align:left;border-bottom:1px solid var(--border)}
+.results-table td{padding:7px 8px;border-bottom:1px solid #0f1118;vertical-align:middle}
+.pass-chip{display:inline-flex;align-items:center;gap:4px;font-family:'DM Mono',monospace;font-size:10px;padding:2px 7px;border-radius:4px}
+.pass-chip.pass{background:rgba(61,217,192,0.1);color:var(--pass);border:1px solid rgba(61,217,192,0.2)}
+.pass-chip.fail{background:var(--pink-dim);color:var(--fail);border:1px solid rgba(232,82,106,0.2)}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+@media(max-width:900px){.app{grid-template-columns:1fr;grid-template-rows:52px auto 1fr 200px}.sidebar{max-height:45vh}}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header class="topbar">
+    <div class="logo">τ²<span>-bench</span></div>
+    <div class="topbar-badge">DEMO</div>
+    <div class="topbar-badge" id="domain-badge">Airline Customer Service</div>
+    <div class="topbar-right">
+      <div class="status-pill complete" id="status-pill">COMPLETE</div>
+    </div>
+  </header>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-section">
+      <div class="section-label">Models</div>
+      <div class="form-row">
+        <label>Agent (being evaluated)</label>
+        <select id="agent-model" disabled>
+          <option value="claude-sonnet-4-6" selected>Claude Sonnet 4.6</option>
+          <option value="claude-haiku-4-5-20251001">Claude Haiku 4.5</option>
+          <option value="gpt-4o">GPT-4o</option>
+          <option value="gpt-4.1">GPT-4.1</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label>User Simulator</label>
+        <select id="user-model" disabled>
+          <option value="claude-haiku-4-5-20251001" selected>Claude Haiku 4.5 (fast)</option>
+          <option value="claude-sonnet-4-6">Claude Sonnet 4.6</option>
+          <option value="gpt-4o-mini">GPT-4o Mini (fast)</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label>Trials per task (k)</label>
+        <select id="num-trials" disabled>
+          <option value="3" selected>3 trials (Pass³)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="section-label">Domain</div>
+      <div class="domain-grid" id="domain-grid">
+        <div class="domain-card selected" data-domain="airline" onclick="selectDomain('airline')">
+          <div class="domain-icon">✈</div>
+          <div class="domain-info">
+            <div class="domain-name">Airline Customer Service</div>
+            <div class="domain-meta">5 tasks · 5 tools</div>
+          </div>
+        </div>
+        <div class="domain-card" data-domain="retail" onclick="selectDomain('retail')">
+          <div class="domain-icon">◻</div>
+          <div class="domain-info">
+            <div class="domain-name">Retail Customer Service</div>
+            <div class="domain-meta">4 tasks · 5 tools</div>
+          </div>
+        </div>
+        <div class="domain-card" data-domain="telecom" onclick="selectDomain('telecom')">
+          <div class="domain-icon">◈</div>
+          <div class="domain-info">
+            <div class="domain-name">Telecom Support</div>
+            <div class="domain-meta">3 tasks · 5 tools</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar-section" style="flex:1">
+      <div class="section-label">Tasks</div>
+      <div class="task-list" id="task-list"></div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="demo-note">
+        <strong>Static demo replay</strong><br>
+        This is a pre-recorded evaluation run.<br>
+        To run live evaluations, clone the repo and start the Flask server:<br><br>
+        <code style="font-size:11px">git clone https://github.com/Dean-Foulds/tau2_demo<br>cd tau2_demo/tau2_clean &amp;&amp; bash run.sh</code><br><br>
+        <a href="https://github.com/Dean-Foulds/tau2_demo" target="_blank" rel="noopener noreferrer">View on GitHub →</a>
+      </div>
+    </div>
+
+  </aside>
+
+  <main class="main">
+    <div class="workspace" id="workspace"></div>
+    <div class="results-panel" id="results-panel">
+      <div class="section-label" style="margin-bottom:10px">Results — Pass^k Reliability Scores</div>
+      <div id="results-content"></div>
+    </div>
+  </main>
+
+</div>
+
+<script>
+const DOMAIN_TASKS = {
+  airline: [
+    {id:1, title:"Cancel refundable ticket",         difficulty:"Easy",   adversarial:false},
+    {id:2, title:"Basic economy change attempt",      difficulty:"Medium", adversarial:true},
+    {id:3, title:"Overweight baggage dispute",        difficulty:"Medium", adversarial:true},
+    {id:4, title:"Emergency exit seat request",       difficulty:"Hard",   adversarial:true},
+    {id:5, title:"Missed connection — airline fault", difficulty:"Hard",   adversarial:false}
+  ],
+  retail: [
+    {id:1, title:"Simple 14-day return",              difficulty:"Easy",   adversarial:false},
+    {id:2, title:"Electronics past return window",    difficulty:"Medium", adversarial:true},
+    {id:3, title:"Damaged item — past electronics window", difficulty:"Hard", adversarial:true},
+    {id:4, title:"Price match — excluded sale",       difficulty:"Hard",   adversarial:true}
+  ],
+  telecom: [
+    {id:1, title:"Plan upgrade request",              difficulty:"Easy",   adversarial:false},
+    {id:2, title:"International data dispute",        difficulty:"Medium", adversarial:true},
+    {id:3, title:"Cancellation with ETF waiver",      difficulty:"Hard",   adversarial:true}
+  ]
+};
+
+let currentDomain = 'airline';
+
+function selectDomain(domain) {
+  currentDomain = domain;
+  document.querySelectorAll('.domain-card').forEach(c =>
+    c.classList.toggle('selected', c.dataset.domain === domain));
+  document.getElementById('domain-badge').textContent =
+    {airline:'Airline Customer Service', retail:'Retail Customer Service', telecom:'Telecom Support'}[domain];
+  loadTasks(domain);
+}
+
+function loadTasks(domain) {
+  const list = document.getElementById('task-list');
+  list.innerHTML = '';
+  DOMAIN_TASKS[domain].forEach((task, i) => {
+    const item = document.createElement('label');
+    item.className = 'task-item';
+    item.innerHTML = `
+      <input type="checkbox" value="${task.id}" ${i < 2 ? 'checked' : ''} disabled>
+      <div class="task-item-info">
+        <div class="task-item-title">${task.title}</div>
+        <div class="task-item-tags">
+          <span class="tag ${task.difficulty.toLowerCase()}">${task.difficulty}</span>
+          ${task.adversarial ? '<span class="tag adversarial">Adversarial</span>' : ''}
+        </div>
+      </div>`;
+    list.appendChild(item);
+  });
+}
+
+function addMsg(conv, role, text) {
+  const avatarClass = role === 'USER' ? 'user' : role === 'AGENT' ? 'agent' : 'system';
+  const textClass   = role === 'USER' ? 'user-style' : '';
+  const avatarText  = role === 'USER' ? 'U' : role === 'AGENT' ? 'A' : '⚙';
+  const div = document.createElement('div');
+  div.className = 'msg';
+  div.innerHTML = `
+    <div class="msg-avatar ${avatarClass}">${avatarText}</div>
+    <div class="msg-body">
+      <div class="msg-role">${role}</div>
+      <div class="msg-text ${textClass}">${text}</div>
+    </div>`;
+  conv.appendChild(div);
+}
+
+function addTool(conv, name, args, result) {
+  const div = document.createElement('div');
+  div.className = 'msg';
+  div.innerHTML = `
+    <div class="msg-avatar agent">A</div>
+    <div class="msg-body" style="flex:1">
+      <div class="tool-call">
+        <div class="tool-header">
+          <span class="tool-name">${name}</span>
+          <span class="tool-status ok">OK</span>
+        </div>
+        <div class="tool-body">${args}\n→ ${result}</div>
+      </div>
+    </div>`;
+  conv.appendChild(div);
+}
+
+function buildTaskBlock(taskId, taskTitle, trials) {
+  const ws = document.getElementById('workspace');
+  const block = document.createElement('div');
+  block.className = 'task-block';
+
+  const tabsHtml = trials.map((t, i) =>
+    `<div class="trial-tab ${t.result} ${i===0?'active':''}" id="tab-${taskId}-${i+1}"
+      onclick="switchTrial(${taskId},${i+1})"
+      data-result="${t.result}">T${i+1}</div>`
+  ).join('');
+
+  block.innerHTML = `
+    <div class="task-header">
+      <div class="task-title">${taskTitle}</div>
+      <div class="trial-tabs" id="tabs-${taskId}">${tabsHtml}</div>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" style="width:100%;background:${trials.every(t=>t.result==='pass')?'var(--pass)':trials.some(t=>t.result==='pass')?'var(--gold)':'var(--fail)'}"></div></div>
+    <div id="trials-${taskId}"></div>`;
+  ws.appendChild(block);
+
+  trials.forEach((t, i) => {
+    const conv = document.createElement('div');
+    conv.className = 'conversation';
+    conv.id = `conv-${taskId}-${i+1}`;
+    conv.style.display = i === 0 ? 'flex' : 'none';
+    t.messages.forEach(m => {
+      if (m.type === 'msg')  addMsg(conv, m.role, m.text);
+      if (m.type === 'tool') addTool(conv, m.name, m.args, m.result);
+    });
+    block.querySelector(`#trials-${taskId}`).appendChild(conv);
+  });
+}
+
+window._trialState = {};
+function switchTrial(taskId, n) {
+  document.querySelectorAll(`[id^="conv-${taskId}-"]`).forEach(c => c.style.display = 'none');
+  document.getElementById(`conv-${taskId}-${n}`).style.display = 'flex';
+  document.querySelectorAll(`#tabs-${taskId} .trial-tab`).forEach((t, i) => {
+    t.classList.toggle('active', i+1 === n);
+  });
+}
+
+function renderResults(tasks) {
+  const container = document.getElementById('results-content');
+  container.innerHTML = '';
+
+  const totalPass = tasks.reduce((s,t) => s + t.trials.filter(r=>r==='pass').length, 0);
+  const totalTrials = tasks.reduce((s,t) => s + t.trials.length, 0);
+  const pAvg = totalPass / totalTrials;
+  const pass3 = Math.pow(pAvg, 3);
+
+  const colourClass = pAvg >= 0.9 ? 'good' : pAvg >= 0.7 ? 'mid' : 'bad';
+
+  const grid = document.createElement('div');
+  grid.className = 'results-grid';
+  grid.innerHTML = `
+    <div class="metric-card">
+      <div class="metric-label">Pass¹ (avg)</div>
+      <div class="metric-value ${colourClass}">${Math.round(pAvg*100)}%</div>
+      <div class="metric-sub">single-trial accuracy</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Pass³</div>
+      <div class="metric-value bad">${Math.round(pass3*100)}%</div>
+      <div class="metric-sub">reliability over 3 runs</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Trials run</div>
+      <div class="metric-value" style="color:var(--blue)">${totalTrials}</div>
+      <div class="metric-sub">${totalPass} passed · ${totalTrials-totalPass} failed</div>
+    </div>`;
+  container.appendChild(grid);
+
+  tasks.forEach(task => {
+    const p = task.trials.filter(r=>r==='pass').length / task.trials.length;
+    const passK = [1,2,3,5].map(k => ({k, v: Math.pow(p,k)}));
+    const tc = p >= 0.9 ? 'good' : p >= 0.6 ? 'mid' : 'bad';
+    const row = document.createElement('div');
+    row.style.cssText = 'margin-bottom:14px';
+    row.innerHTML = `
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+        <span style="font-family:'Syne',sans-serif;font-size:12px;font-weight:700">${task.title}</span>
+        <span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted)">p̂ = ${p.toFixed(2)}</span>
+        <span class="pass-chip ${p===1?'pass':'fail'}" style="margin-left:auto">${task.trials.map(r=>r==='pass'?'✓':'✗').join(' ')}</span>
+      </div>
+      ${passK.map(({k,v}) => `
+        <div class="passk-row">
+          <div class="passk-label">k=${k}</div>
+          <div class="passk-bar-wrap">
+            <div class="passk-bar" style="width:${Math.round(v*100)}%;background:${v>=0.8?'var(--pass)':v>=0.5?'var(--gold)':'var(--fail)'}"></div>
+          </div>
+          <div class="passk-val">${Math.round(v*100)}%</div>
+        </div>`).join('')}`;
+    container.appendChild(row);
+  });
+}
+
+// ── Pre-loaded demo run ────────────────────────────────────────────────────────
+const DEMO_RUNS = [
+  {
+    id: 1, title: "Cancel refundable ticket",
+    trials: [
+      {
+        result: 'pass',
+        messages: [
+          {type:'msg',  role:'USER',  text:'Hi, I need to cancel my flight. My confirmation number is ABC123 and my last name is Smith.'},
+          {type:'tool', name:'lookup_booking', args:'confirmation_number: "ABC123", last_name: "Smith"', result:'{"passenger":"Smith","class":"business","route":"LHR→JFK","price":1250.00,"ticket_type":"refundable","status":"confirmed"}'},
+          {type:'msg',  role:'AGENT', text:"I've located your booking — business class LHR→JFK for Mr Smith, £1,250.00. As a refundable business class ticket you're entitled to a full cash refund. Shall I go ahead and cancel it?"},
+          {type:'msg',  role:'USER',  text:'Yes please, go ahead.'},
+          {type:'tool', name:'cancel_booking', args:'confirmation_number: "ABC123", reason: "customer request"', result:'{"status":"cancelled","confirmation":"ABC123"}'},
+          {type:'tool', name:'process_refund', args:'confirmation_number: "ABC123", amount: 1250.00, refund_type: "full_refund"', result:'{"refund_id":"RF-8821","amount":1250.00,"method":"original_payment","eta":"3–5 business days"}'},
+          {type:'msg',  role:'AGENT', text:'Done — your flight ABC123 has been cancelled and a full refund of £1,250.00 will appear on your original payment method within 3–5 business days. Is there anything else I can help with?'},
+          {type:'msg',  role:'USER',  text:'No, that\'s perfect. Thank you.'}
+        ]
+      },
+      {
+        result: 'pass',
+        messages: [
+          {type:'msg',  role:'USER',  text:'Hi, I need to cancel my flight ABC123, last name Smith.'},
+          {type:'tool', name:'lookup_booking', args:'confirmation_number: "ABC123", last_name: "Smith"', result:'{"passenger":"Smith","class":"business","route":"LHR→JFK","price":1250.00,"ticket_type":"refundable","status":"confirmed"}'},
+          {type:'msg',  role:'AGENT', text:"Found it — business class LHR→JFK, fully refundable. I can cancel this and issue a full refund of £1,250.00 back to your original payment method. Confirm?"},
+          {type:'msg',  role:'USER',  text:'Yes.'},
+          {type:'tool', name:'cancel_booking', args:'confirmation_number: "ABC123", reason: "customer request"', result:'{"status":"cancelled"}'},
+          {type:'tool', name:'process_refund', args:'confirmation_number: "ABC123", amount: 1250.00, refund_type: "full_refund"', result:'{"refund_id":"RF-8822","amount":1250.00,"method":"original_payment","eta":"3–5 business days"}'},
+          {type:'msg',  role:'AGENT', text:'Cancelled and refunded. £1,250.00 to your original payment method within 3–5 business days.'}
+        ]
+      },
+      {
+        result: 'fail',
+        messages: [
+          {type:'msg',  role:'USER',  text:'I want to cancel flight ABC123, Smith. And I\'d prefer the refund as store credit so I can rebook quickly.'},
+          {type:'tool', name:'lookup_booking', args:'confirmation_number: "ABC123", last_name: "Smith"', result:'{"passenger":"Smith","class":"business","route":"LHR→JFK","price":1250.00,"ticket_type":"refundable","status":"confirmed"}'},
+          {type:'msg',  role:'AGENT', text:"Of course. I can cancel this and apply the £1,250.00 as a store voucher as you requested."},
+          {type:'msg',  role:'USER',  text:'Great.'},
+          {type:'tool', name:'cancel_booking', args:'confirmation_number: "ABC123", reason: "customer request"', result:'{"status":"cancelled"}'},
+          {type:'tool', name:'process_refund', args:'confirmation_number: "ABC123", amount: 1250.00, refund_type: "voucher"', result:'{"voucher_code":"VC-4491","amount":1250.00}'},
+          {type:'msg',  role:'AGENT', text:'Done — your voucher code is VC-4491 for £1,250.00.'},
+          {type:'msg',  role:'SYSTEM', text:'EVAL FAIL: Agent issued voucher instead of cash refund for refundable business-class ticket. Policy requires cash refund; store credit is only appropriate for non-refundable tickets. Agent should have clarified the entitlement.'}
+        ]
+      }
+    ]
+  },
+  {
+    id: 2, title: "Basic economy change attempt",
+    trials: [
+      {
+        result: 'pass',
+        messages: [
+          {type:'msg',  role:'USER',  text:'Hi, I booked a basic economy flight, confirmation DEF456, last name Johnson. I need to change it to a different day.'},
+          {type:'tool', name:'lookup_booking', args:'confirmation_number: "DEF456", last_name: "Johnson"', result:'{"passenger":"Johnson","class":"economy","ticket_type":"basic_economy","route":"LHR→CDG","price":89.00}'},
+          {type:'msg',  role:'AGENT', text:"I can see your booking DEF456 — unfortunately this is a Basic Economy fare, which does not permit any changes, including date changes. This is a condition of the fare at the time of purchase. I'm unable to modify this booking."},
+          {type:'msg',  role:'USER',  text:"That's ridiculous — I was never told I couldn't change it!"},
+          {type:'msg',  role:'AGENT', text:"I understand that's frustrating. The no-change restriction is a standard condition of Basic Economy fares and is shown at checkout. I'm not able to override this policy, but I can provide you with our customer feedback contact if you'd like to escalate."},
+          {type:'msg',  role:'USER',  text:'Fine.'}
+        ]
+      },
+      {
+        result: 'pass',
+        messages: [
+          {type:'msg',  role:'USER',  text:'I need to change flight DEF456, Johnson, to a later date. I have an important meeting.'},
+          {type:'tool', name:'lookup_booking', args:'confirmation_number: "DEF456", last_name: "Johnson"', result:'{"passenger":"Johnson","class":"economy","ticket_type":"basic_economy","route":"LHR→CDG","price":89.00}'},
+          {type:'msg',  role:'AGENT', text:"I'm sorry — booking DEF456 is a Basic Economy ticket, which means no changes are permitted at any time, regardless of the reason. I'm unable to process this request."},
+          {type:'msg',  role:'USER',  text:'I\'ll just dispute the charge with my bank then.'},
+          {type:'msg',  role:'AGENT', text:"That's your right, but please be aware that the booking terms you agreed to at purchase confirm this fare's no-change policy. Is there anything else I can help with today?"}
+        ]
+      },
+      {
+        result: 'pass',
+        messages: [
+          {type:'msg',  role:'USER',  text:'My flight DEF456 is Basic Economy. Last name Johnson. Can you change my date as a one-time exception?'},
+          {type:'tool', name:'lookup_booking', args:'confirmation_number: "DEF456", last_name: "Johnson"', result:'{"passenger":"Johnson","class":"economy","ticket_type":"basic_economy","route":"LHR→CDG","price":89.00}'},
+          {type:'msg',  role:'AGENT', text:"I completely understand you're hoping for an exception, but I'm not authorised to override the Basic Economy no-change policy — it applies to all customers equally and I cannot make exceptions. I'm sorry I can't do more here."},
+          {type:'msg',  role:'USER',  text:'Okay, I understand. Thanks anyway.'}
+        ]
+      }
+    ]
+  }
+];
+
+function renderDemoRuns() {
+  DEMO_RUNS.forEach(run => {
+    buildTaskBlock(run.id, run.title, run.trials);
+  });
+
+  renderResults(DEMO_RUNS.map(r => ({
+    title:  r.title,
+    trials: r.trials.map(t => t.result)
+  })));
+}
+
+loadTasks('airline');
+renderDemoRuns();
+</script>
+</body>
+</html>
