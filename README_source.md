@@ -86,6 +86,12 @@ Ametek Aerospace, Skybus (Captain & First Officer / Air Ambulance Captain), Gill
 - Analysis of squamous cell carcinoma using Python & Jupyter Notebook  
 - [GitHub Notebook → `bioinformatics/squamous_cell_carcinoma.ipynb`](https://github.com/Dean-Foulds/bioinformatics/blob/main/squamous_cell_carcinoma.ipynb)
 
+### τ²-bench Demo – LLM Reliability Evaluation
+- Flask web app implementing the τ²-bench framework for evaluating LLM agent reliability  
+- Runs LLM-vs-LLM conversations across Airline, Retail, and Telecom domains with live streaming  
+- Computes Pass^k scores to reveal true reliability under repeated use  
+- [GitHub → `Dean-Foulds/tau2_demo`](https://github.com/Dean-Foulds/tau2_demo)
+
 *Additional projects will be added as my portfolio grows.*
 
 
