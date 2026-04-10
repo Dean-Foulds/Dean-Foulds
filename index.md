@@ -71,7 +71,9 @@ title: Dean Foulds – Data Scientist & ML Engineer
     <div class="project-card">
       <h3>τ²-bench Demo – LLM Reliability Evaluation</h3>
       <p>Flask web app implementing the τ²-bench framework. Runs LLM-vs-LLM agent evaluations across customer service domains (Airline, Retail, Telecom) with live conversation streaming and Pass^k reliability scoring.</p>
-      <a target="_blank" rel="noopener noreferrer" href="projects/tau2_demo">View Project</a>
+      <a target="_blank" rel="noopener noreferrer" href="projects/tau2_demo">View Demo</a>
+      &nbsp;·&nbsp;
+      <a target="_blank" rel="noopener noreferrer" href="projects/tau2_demo/tau2_bench_talk.html">View Talk</a>
     </div>
   </div>
 </section>

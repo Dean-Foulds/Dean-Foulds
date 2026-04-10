@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>τ-bench &amp; τ²-bench — Agent Reliability Evaluation</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;1,300&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=IBM+Plex+Serif:ital,wght@0,300;0,400;1,300&display=swap');
+
+:root {
+  --bg:    #f5f4f0;
+  --bg2:   #eeede9;
+  --bg3:   #e4e3de;
+  --ink:   #1a1a18;
+  --ink2:  #3a3a36;
+  --ink3:  #6a6a64;
+  --rule:  #c8c7c2;
+  --red:   #c0392b;
+  --blue:  #1a4a8a;
+  --green: #1a6a3a;
+  --amber: #8a5a00;
+  --acc:   #c0392b;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%; overflow: hidden;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'IBM Plex Sans', sans-serif;
+}
+
+/* ── SLIDE SYSTEM ──────────────────────────────────────────────────── */
+.slide {
+  display: none;
+  position: absolute; inset: 0;
+  padding: 64px 80px 72px;
+  overflow: hidden;
+}
+.slide.active { display: flex; flex-direction: column; }
+
+/* ── GRID OVERLAY ──────────────────────────────────────────────────── */
+.slide::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(var(--rule) 1px, transparent 1px),
+    linear-gradient(90deg, var(--rule) 1px, transparent 1px);
+  background-size: 48px 48px;
+  opacity: 0.18;
+  pointer-events: none;
+}
+.slide > * { position: relative; z-index: 1; }
+
+/* ── CHROME ────────────────────────────────────────────────────────── */
+#progress {
+  position: fixed; top: 0; left: 0; right: 0;
+  height: 2px; background: var(--bg3); z-index: 100;
+}
+#progress-fill { height: 100%; background: var(--red); transition: width 0.35s; }
+
+#meta {
+  position: fixed; bottom: 14px; right: 24px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px; color: var(--ink3);
+  letter-spacing: 0.1em; z-index: 100;
+  display: flex; gap: 20px;
+}
+
+#timer-badge {
+  position: fixed; bottom: 14px; left: 24px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px; color: var(--ink3);
+  letter-spacing: 0.1em; z-index: 100;
+}
+
+.notes-bar {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: #1a1a18; color: #c8c7c2;
+  font-family: 'IBM Plex Mono', monospace; font-size: 12px;
+  line-height: 1.6; padding: 14px 80px 20px;
+  transform: translateY(100%); transition: transform 0.3s;
+  z-index: 200; max-height: 220px; overflow-y: auto;
+}
+.notes-bar.open { transform: translateY(0); }
+.notes-label { font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; color: #5a5a54; margin-bottom: 6px; }
+
+/* ── TYPOGRAPHY ────────────────────────────────────────────────────── */
+.label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--ink3);
+  margin-bottom: 20px;
+}
+.label span { color: var(--red); }
+
+.display {
+  font-family: 'IBM Plex Serif', serif;
+  font-size: clamp(40px, 5.5vw, 72px);
+  font-weight: 400; line-height: 1.05;
+  letter-spacing: -0.01em; color: var(--ink);
+}
+.display em { font-style: italic; color: var(--ink2); }
+
+.h2 {
+  font-family: 'IBM Plex Serif', serif;
+  font-size: clamp(24px, 3vw, 40px);
+  font-weight: 400; line-height: 1.1; color: var(--ink);
+}
+
+.h3 {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: clamp(14px, 1.4vw, 18px);
+  font-weight: 500; color: var(--ink2);
+}
+
+.body {
+  font-size: clamp(13px, 1.3vw, 16px);
+  line-height: 1.7; color: var(--ink2);
+  font-weight: 300; max-width: 760px;
+}
+
+.mono { font-family: 'IBM Plex Mono', monospace; }
+.red  { color: var(--red); }
+.blue { color: var(--blue); }
+
+/* ── RULE ──────────────────────────────────────────────────────────── */
+.hrule {
+  border: none; border-top: 1px solid var(--rule);
+  margin: 18px 0;
+}
+.hrule-heavy {
+  border: none; border-top: 2px solid var(--ink);
+  margin: 20px 0 18px;
+}
+
+/* ── COLUMNS ───────────────────────────────────────────────────────── */
+.cols { display: grid; gap: 40px; flex: 1; align-items: start; }
+.cols-2 { grid-template-columns: 1fr 1fr; }
+.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+.cols-65 { grid-template-columns: 1.6fr 1fr; }
+.cols-56 { grid-template-columns: 1fr 1.4fr; }
+
+/* ── CALLOUT ───────────────────────────────────────────────────────── */
+.callout {
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--red);
+  padding: 14px 18px;
+  background: var(--bg2);
+  font-size: clamp(12px, 1.2vw, 15px);
+  line-height: 1.6; color: var(--ink2);
+  font-weight: 300;
+}
+.callout.blue { border-left-color: var(--blue); }
+.callout.green { border-left-color: var(--green); }
+
+/* ── BULLET LIST ───────────────────────────────────────────────────── */
+.blist { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+.blist li {
+  display: flex; gap: 14px;
+  font-size: clamp(13px, 1.3vw, 16px);
+  line-height: 1.6; color: var(--ink2); font-weight: 300;
+}
+.blist li::before {
+  content: '—';
+  font-family: 'IBM Plex Mono', monospace;
+  color: var(--red); flex-shrink: 0;
+}
+
+/* ── TABLE ─────────────────────────────────────────────────────────── */
+.dtable { border-collapse: collapse; width: 100%; font-size: 13px; }
+.dtable th {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--ink3); padding: 8px 14px;
+  border-bottom: 2px solid var(--ink); text-align: left;
+}
+.dtable td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--rule);
+  color: var(--ink2); font-weight: 300;
+}
+.dtable .mono { font-size: 12px; }
+.dtable .hi  { color: var(--green); }
+.dtable .lo  { color: var(--red); }
+.dtable .mid { color: var(--amber); }
+
+/* ── FORMULA BLOCK ─────────────────────────────────────────────────── */
+.formula-block {
+  border: 1px solid var(--rule);
+  border-top: 2px solid var(--ink);
+  padding: 20px 28px;
+  background: var(--bg2);
+  display: inline-block;
+}
+.formula {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: clamp(16px, 2vw, 26px);
+  color: var(--ink); line-height: 1.6;
+}
+.formula-sub {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px; color: var(--ink3); line-height: 1.8;
+  margin-top: 8px;
+}
+
+/* ── METRIC GRID ───────────────────────────────────────────────────── */
+.metric-box {
+  border: 1px solid var(--rule);
+  border-top: 2px solid var(--ink);
+  padding: 16px 18px;
+  background: var(--bg2);
+}
+.metric-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--ink3);
+  margin-bottom: 6px;
+}
+.metric-val {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: clamp(26px, 3.5vw, 44px);
+  font-weight: 600; line-height: 1; color: var(--ink);
+}
+.metric-val.hi  { color: var(--green); }
+.metric-val.mid { color: var(--amber); }
+.metric-val.lo  { color: var(--red); }
+.metric-sub { font-size: 11px; color: var(--ink3); margin-top: 5px; font-weight: 300; }
+
+/* ── BAR CHART ─────────────────────────────────────────────────────── */
+.bar-row { display: flex; gap: 10px; align-items: center; margin: 8px 0; }
+.bar-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px; color: var(--ink3);
+  width: 32px; flex-shrink: 0; text-align: right;
+}
+.bar-track {
+  flex: 1; height: 16px;
+  background: var(--bg3); border: 1px solid var(--rule);
+  position: relative;
+}
+.bar-fill { height: 100%; transition: width 0.6s ease; }
+.bar-val {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px; color: var(--ink2);
+  width: 38px; flex-shrink: 0;
+}
+
+/* ── STEPLIST ──────────────────────────────────────────────────────── */
+.steplist { display: flex; flex-direction: column; }
+.step { display: flex; gap: 0; }
+.step-left { display: flex; flex-direction: column; align-items: center; width: 36px; flex-shrink: 0; }
+.step-num {
+  width: 24px; height: 24px;
+  border: 1px solid var(--ink3);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px; color: var(--ink2);
+  flex-shrink: 0;
+}
+.step-line { width: 1px; flex-grow: 1; background: var(--rule); margin: 2px 0; }
+.step-body { padding: 2px 0 20px; }
+.step-title { font-size: 14px; font-weight: 500; margin-bottom: 3px; }
+.step-desc { font-size: 12px; color: var(--ink3); line-height: 1.5; font-weight: 300; }
+
+/* ── DIAGRAM ───────────────────────────────────────────────────────── */
+svg { overflow: visible; }
+svg text { font-family: 'IBM Plex Mono', monospace; }
+
+/* ── TITLE SLIDE ───────────────────────────────────────────────────── */
+#s0 { justify-content: flex-end; padding-bottom: 80px; }
+#s0 .corner-mark {
+  position: absolute; top: 64px; right: 80px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px; color: var(--ink3); letter-spacing: 0.15em;
+  text-align: right; line-height: 1.8;
+}
+#s0 .display { max-width: 840px; margin-bottom: 24px; }
+#s0 .subtitle {
+  font-size: clamp(14px, 1.4vw, 17px);
+  color: var(--ink3); font-weight: 300; max-width: 640px;
+  line-height: 1.6; margin-bottom: 32px;
+}
+#s0 .byline {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px; letter-spacing: 0.18em; color: var(--ink3);
+  text-transform: uppercase;
+}
+
+/* ── AGENDA ────────────────────────────────────────────────────────── */
+.agenda-table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+.agenda-table td { padding: 10px 14px; border-bottom: 1px solid var(--rule); font-size: 14px; font-weight: 300; vertical-align: top; }
+.agenda-table td:first-child { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--red); width: 32px; }
+.agenda-table td:last-child { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--ink3); width: 60px; text-align: right; }
+
+/* ── COMPARE ───────────────────────────────────────────────────────── */
+.cmp-box { border: 1px solid var(--rule); padding: 20px; background: var(--bg2); }
+.cmp-head {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.cmp-head.fail { color: var(--red); }
+.cmp-head.pass { color: var(--green); }
+
+/* ── QUOTE ─────────────────────────────────────────────────────────── */
+.blockq {
+  border-left: 2px solid var(--rule);
+  padding: 10px 18px;
+  font-family: 'IBM Plex Serif', serif;
+  font-size: clamp(15px, 1.5vw, 20px);
+  font-style: italic; font-weight: 300;
+  color: var(--ink2); line-height: 1.5; max-width: 680px;
+}
+.blockq cite {
+  display: block; margin-top: 8px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px; font-style: normal;
+  letter-spacing: 0.15em; color: var(--ink3);
+  text-transform: uppercase;
+}
+</style>
+</head>
+<body>
+
+<div id="progress"><div id="progress-fill"></div></div>
+<div id="timer-badge">⏱ 0:00</div>
+<div id="meta">
+  <span id="slide-n">1 / 18</span>
+  <span>[ N ] NOTES</span>
+</div>
+<div class="notes-bar" id="notes-bar">
+  <div class="notes-label">Speaker notes</div>
+  <div id="notes-text"></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ SLIDE 01 -->
+<div class="slide active" id="s0"
+  data-notes="Welcome everyone. Over the next 30 minutes I want to convince you that a number you probably report — single-run pass rate — is a systematically misleading metric for AI agents deployed in production. We'll go through the theory, the benchmark design, the empirical results, and what you should actually do about it.">
+  <div class="corner-mark">
+    AGENT EVALUATION<br>
+    30-MIN TALK<br>
+    τ²-bench
+  </div>
+  <div class="label"><span>01</span> / 18</div>
+  <div class="display">τ-bench &amp; τ²-bench<br><em>Measuring Agent Reliability</em></div>
+  <hr class="hrule" style="max-width:480px; margin-left:0;">
+  <div class="subtitle">Why single-run accuracy is a misleading proxy — and how Pass<sup>k</sup> reveals the reliability properties that matter in deployment.</div>
+  <div class="byline">D. FOULDS · DATA SCIENTIST &amp; ML ENGINEER</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ SLIDE 02 -->
+<div class="slide" id="s1"
+  data-notes="Seven acts. I've timed this to roughly 30 minutes. The first 10 minutes are conceptual motivation, the middle 15 are the benchmark mechanics, and the final 5 are practical takeaways and open problems.">
+  <div class="label"><span>02</span> / 18 — Outline</div>
+  <div class="h2" style="margin-bottom:20px;">Talk Structure</div>
+  <hr class="hrule-heavy">
+  <div class="cols cols-2" style="flex:1">
+    <table class="agenda-table">
+      <tr><td>I</td><td>The reliability gap: why Pass¹ fails</td><td>~4 min</td></tr>
+      <tr><td>II</td><td>τ-bench: design &amp; motivation</td><td>~4 min</td></tr>
+      <tr><td>III</td><td>Pass<sup>k</sup>: metric derivation &amp; examples</td><td>~5 min</td></tr>
+      <tr><td>IV</td><td>τ²-bench: three extensions</td><td>~5 min</td></tr>
+      <tr><td>V</td><td>Empirical results across models</td><td>~5 min</td></tr>
+      <tr><td>VI</td><td>Practical guidance</td><td>~4 min</td></tr>
+      <tr><td>VII</td><td>Open problems &amp; Q&amp;A</td><td>~3 min</td></tr>
+    </table>
+    <div>
+      <div class="callout">
+        <strong>Audience assumption:</strong> familiar with LLM APIs and agent architectures. Some exposure to statistical testing helpful but not required.
+      </div>
+      <div style="margin-top:16px;" class="callout blue">
+        <strong>Core claim:</strong> the standard benchmark paradigm — report mean success rate on a single trial — systematically overstates the reliability of agents in production.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ SLIDE 03 -->
+<div class="slide" id="s2"
+  data-notes="Start here — the core mismatch. When we quote benchmark accuracy we are measuring something fundamentally different from what happens in production. Production agents run the same class of task repeatedly. Failure probability compounds. An 18% error rate per run means you get ~85 failures per 1000 runs — that's not 18% visible damage, that's 85 incidents.">
+  <div class="label"><span>03</span> / 18 — Act I</div>
+  <div class="h2">The Production Mismatch</div>
+  <hr class="hrule-heavy">
+  <div class="cols cols-2" style="flex:1; margin-top:8px;">
+    <div>
+      <ul class="blist">
+        <li>Benchmarks report <span class="mono" style="font-size:13px;">accuracy(single trial)</span> — success rate averaged across tasks, one run per task.</li>
+        <li>Production agents run the <em>same class of task</em> hundreds or thousands of times. A refund agent handles 500 requests/day.</li>
+        <li>Under repeated execution, per-trial error rate <em>p</em><sub>err</sub> = 1−p compounds: n failures in N runs ≈ N·p<sub>err</sub>.</li>
+        <li>Crucially: failure at turn k of a multi-turn interaction often invalidates all subsequent turns — error is <em>non-recoverable</em>.</li>
+      </ul>
+      <div style="margin-top:20px;" class="callout">
+        An agent with p=0.90 running 500 tasks/day will fail on ~50 tasks daily. If failures are silent, this is a systemic problem invisible to benchmark numbers.
+      </div>
+    </div>
+    <div>
+      <div style="margin-bottom:12px;" class="mono" style="font-size:11px; color:var(--ink3);">FAILURE COUNT DISTRIBUTION (N=1000, p=0.82)</div>
+      <svg width="100%" viewBox="0 0 320 200">
+        <!-- axes -->
+        <line x1="40" y1="10" x2="40" y2="170" stroke="#c8c7c2" stroke-width="1"/>
+        <line x1="40" y1="170" x2="300" y2="170" stroke="#c8c7c2" stroke-width="1"/>
+        <!-- bars: binomial-ish around mean=180 -->
+        <rect x="60"  y="158" width="16" height="12"  fill="#1a1a18" opacity="0.3"/>
+        <rect x="80"  y="148" width="16" height="22"  fill="#1a1a18" opacity="0.4"/>
+        <rect x="100" y="130" width="16" height="40"  fill="#1a1a18" opacity="0.5"/>
+        <rect x="120" y="108" width="16" height="62"  fill="#1a1a18" opacity="0.6"/>
+        <rect x="140" y="82"  width="16" height="88"  fill="#1a1a18" opacity="0.7"/>
+        <rect x="160" y="58"  width="16" height="112" fill="#1a1a18" opacity="0.85"/>
+        <rect x="180" y="68"  width="16" height="102" fill="#1a1a18" opacity="0.75"/>
+        <rect x="200" y="92"  width="16" height="78"  fill="#1a1a18" opacity="0.6"/>
+        <rect x="220" y="122" width="16" height="48"  fill="#1a1a18" opacity="0.45"/>
+        <rect x="240" y="148" width="16" height="22"  fill="#1a1a18" opacity="0.3"/>
+        <rect x="260" y="160" width="16" height="10"  fill="#1a1a18" opacity="0.2"/>
+        <!-- mean line -->
+        <line x1="168" y1="10" x2="168" y2="170" stroke="#c0392b" stroke-width="1.5" stroke-dasharray="4,3"/>
+        <!-- labels -->
+        <text x="168" y="8" text-anchor="middle" font-size="9" fill="#c0392b">μ≈180</text>
+        <text x="40" y="185" font-size="9" fill="#6a6a64">0</text>
+        <text x="155" y="185" font-size="9" fill="#6a6a64">~180</text>
+        <text x="270" y="185" font-size="9" fill="#6a6a64">~250</text>
+        <text x="15" y="90" font-size="9" fill="#6a6a64" transform="rotate(-90,15,90)">P(k failures)</text>
+        <text x="170" y="198" font-size="9" fill="#6a6a64">failures per 1000 runs</text>
+      </svg>
+      <div class="mono" style="font-size:10px; color:var(--ink3); margin-top:6px;">σ² = N·p·(1−p) → σ ≈ 13.0 failures</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ SLIDE 04 -->
+<div class="slide" id="s3"
+  data-notes="τ-bench is a simulation framework introduced in 2024 — specifically designed to expose this reliability problem. The key innovations over prior benchmarks are: it uses a separate LLM to simulate the user, it evaluates over repeated trials, and it scores on binary task completion rather than generation quality. The domains are customer service because these are genuinely consequential — money changes hands, expectations are set.">
+  <div class="label"><span>04</span> / 18 — Act II</div>
+  <div class="h2">τ-bench: Design Rationale</div>
+  <hr class="hrule-heavy">
+  <div class="cols cols-2" style="flex:1; margin-top:4px;">
+    <div>
+      <div class="steplist">
+        <div class="step">
+          <div class="step-left"><div class="step-num">1</div><div class="step-line"></div></div>
+          <div class="step-body">
+            <div class="step-title">Dual-LLM simulation</div>
+            <div class="step-desc">An agent LLM and a user simulator LLM interact autonomously. Human raters not required at inference time.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-left"><div class="step-num">2</div><div class="step-line"></div></div>
+          <div class="step-body">
+            <div class="step-title">Tool-augmented agent</div>
+            <div class="step-desc">Agent has access to structured tools (database lookups, action APIs). Evaluation includes tool use correctness, not just dialogue quality.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-left"><div class="step-num">3</div><div class="step-line"></div></div>
+          <div class="step-body">
+            <div class="step-title">Policy-grounded scoring</div>
+            <div class="step-desc">Each domain provides a formal policy document. Success is binary: did the agent resolve the task while following policy?</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-left"><div class="step-num">4</div><div class="step-line"></div></div>
+          <div class="step-body">
+            <div class="step-title">k-trial evaluation</div>
+            <div class="step-desc">Each task is run k times independently. Pass<sup>k</sup> measures the fraction of tasks passed on all k trials.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="callout blue" style="margin-bottom:16px;">
+        <strong>Domains (τ-bench v1):</strong><br><br>
+        <span class="mono">RETAIL</span> — 115 tasks: product lookup, order management, returns, exchanges<br><br>
+        <span class="mono">AIRLINE</span> — 50 tasks: rebooking, cancellations, seat changes, refunds
+      </div>
+      <div class="callout">
+        <strong>τ²-bench adds:</strong> telecom domain + adversarial user scripting + multi-agent evaluation. We cover this in Act IV.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ SLIDE 05 -->
+<div class="slide" id="s4"
+  data-notes="This is the mathematical core. Pass-k is simply the probability of passing all k independent trials. The key insight is that even a small per-trial error rate compounds rapidly. This is not a pathological edge case — it is normal statistics. Most engineers are not thinking about this because they're not in the habit of running k>1 trials.">
+  <div class="label"><span>05</span> / 18 — Act III</div>
+  <div class="h2">The Pass<sup>k</sup> Metric</div>
+  <hr class="hrule-heavy">
+  <div class="cols cols-65" style="flex:1; margin-top:8px;">
+    <div>
+      <div class="formula-block" style="margin-bottom:20px;">
+        <div class="formula">Pass<sup>k</sup>(task<sub>i</sub>) = p<sub>i</sub><sup>k</sup></div>
+        <div class="formula-sub">
+          p<sub>i</sub> = Pr[agent passes task i on one trial]<br>
+          Pass<sup>k</sup>(benchmark) = (1/N) · Σ<sub>i=1..N</sub> p<sub>i</sub><sup>k</sup>
+        </div>
+      </div>
+      <ul class="blist">
+        <li>Pass<sup>1</sup> is the standard accuracy metric. It treats each trial as independent and reports the mean.</li>
+        <li>Pass<sup>k</sup> asks: what fraction of tasks does the agent solve <em>reliably</em> — passing every one of k independent attempts?</li>
+        <li>Because p<sub>i</sub> ≤ 1, Pass<sup>k</sup> is monotone decreasing in k. The rate of decrease reveals the variance structure.</li>
+        <li>A task where p<sub>i</sub>=1.0 contributes the same to Pass<sup>k</sup> for all k. Only unreliable tasks cause decay.</li>
+      </ul>
+    </div>
+    <div>
+      <div class="mono" style="font-size:10px; color:var(--ink3); margin-bottom:10px;">PASS⁸ AS A FUNCTION OF p</div>
+      <div class="cols cols-3" style="gap:10px;">
+        <div class="metric-box">
+          <div class="metric-label">p = 0.95</div>
+          <div class="metric-val hi mono">66%</div>
+          <div class="metric-sub">Pass⁸</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-label">p = 0.80</div>
+          <div class="metric-val mid mono">17%</div>
+          <div class="metric-sub">Pass⁸</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-label">p = 0.70</div>
+          <div class="metric-val lo mono">5.8%</div>
+          <div class="metric-sub">Pass⁸</div>
+        </div>
+      </div>
+      <div style="margin-top:16px;" class="callout">
+        <strong>Key observation:</strong> p=0.95 vs p=0.80 differ by 15pp at k=1. At k=8 they differ by 49pp — a 3× amplification of the reliability gap.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ SLIDE 06 -->
+<div class="slide" id="s5"
+  data-notes="The decay curve is the most memorable visualisation in the τ-bench paper. Every model looks similar at k=1. By k=8 the gaps have tripled in relative terms. Crucially, the ranking can invert: a model that looks worse at k=1 may actually be more reliable at k=8 if its error distribution is less bursty. This is not a theoretical concern — it happens empirically.">
+  <div class="label"><span>06</span> / 18 — Act III</div>
+  <div class="h2">Reliability Decay as k Increases</div>
+  <hr class="hrule-heavy">
+  <svg width="100%" viewBox="0 0 720 260" style="margin-top:12px; display:block;">
+    <!-- grid -->
+    <line x1="80" y1="20" x2="80" y2="220" stroke="#c8c7c2" stroke-width="1"/>
+    <line x1="80" y1="220" x2="680" y2="220" stroke="#c8c7c2" stroke-width="1"/>
+    <line x1="80" y1="70"  x2="680" y2="70"  stroke="#c8c7c2" stroke-width="1" stroke-dasharray="3,4"/>
+    <line x1="80" y1="120" x2="680" y2="120" stroke="#c8c7c2" stroke-width="1" stroke-dasharray="3,4"/>
+    <line x1="80" y1="170" x2="680" y2="170" stroke="#c8c7c2" stroke-width="1" stroke-dasharray="3,4"/>
+    <!-- y labels -->
+    <text x="70" y="24" text-anchor="end" font-size="10" fill="#6a6a64">80%</text>
+    <text x="70" y="74" text-anchor="end" font-size="10" fill="#6a6a64">60%</text>
+    <text x="70" y="124" text-anchor="end" font-size="10" fill="#6a6a64">40%</text>
+    <text x="70" y="174" text-anchor="end" font-size="10" fill="#6a6a64">20%</text>
+    <text x="70" y="224" text-anchor="end" font-size="10" fill="#6a6a64">0%</text>
+    <!-- x labels -->
+    <text x="80"  y="238" text-anchor="middle" font-size="10" fill="#6a6a64">k=1</text>
+    <text x="230" y="238" text-anchor="middle" font-size="10" fill="#6a6a64">k=2</text>
+    <text x="380" y="238" text-anchor="middle" font-size="10" fill="#6a6a64">k=4</text>
+    <text x="530" y="238" text-anchor="middle" font-size="10" fill="#6a6a64">k=6</text>
+    <text x="680" y="238" text-anchor="middle" font-size="10" fill="#6a6a64">k=8</text>
+    <!-- GPT-4o p=0.82: 82, 67, 45, 31, 20 -->
+    <polyline points="80,45 230,78 380,130 530,170 680,200"
+      stroke="#1a1a18" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <!-- Claude 3.5 p=0.79 -->
+    <polyline points="80,57 230,93 380,148 530,184 680,210"
+      stroke="#1a1a18" stroke-width="2" fill="none" stroke-dasharray="8,4"/>
+    <!-- Gemini 1.5 p=0.74 -->
+    <polyline points="80,75 230,112 380,162 530,194 680,216"
+      stroke="#1a1a18" stroke-width="2" fill="none" stroke-dasharray="4,4"/>
+    <!-- Llama 3 70B p=0.68 -->
+    <polyline points="80,96 230,138 380,176 530,205 680,219"
+      stroke="#c0392b" stroke-width="2" fill="none" stroke-dasharray="2,4"/>
+    <!-- dots -->
+    <circle cx="80" cy="45" r="3" fill="#1a1a18"/>
+    <circle cx="680" cy="200" r="3" fill="#1a1a18"/>
+    <circle cx="80" cy="96" r="3" fill="#c0392b"/>
+    <circle cx="680" cy="219" r="3" fill="#c0392b"/>
+    <!-- legend -->
+    <line x1="500" y1="30" x2="520" y2="30" stroke="#1a1a18" stroke-width="2"/>
+    <text x="524" y="34" font-size="10" fill="#1a1a18">GPT-4o  (p=0.82)</text>
+    <line x1="500" y1="46" x2="520" y2="46" stroke="#1a1a18" stroke-width="2" stroke-dasharray="8,4"/>
+    <text x="524" y="50" font-size="10" fill="#3a3a36">Claude 3.5 (p=0.79)</text>
+    <line x1="500" y1="62" x2="520" y2="62" stroke="#1a1a18" stroke-width="2" stroke-dasharray="4,4"/>
+    <text x="524" y="66" font-size="10" fill="#3a3a36">Gemini 1.5 (p=0.74)</text>
+    <line x1="500" y1="78" x2="520" y2="78" stroke="#c0392b" stroke-width="2" stroke-dasharray="2,4"/>
+    <text x="524" y="82" font-size="10" fill="#c0392b">Llama 3 70B (p=0.68)</text>
+  </svg>
+  <div class="callout" style="max-width:680px; margin-top:8px;">
+    Models that appear within noise at k=1 diverge substantially by k=8. <strong>Ranking order can invert</strong> — validate at the k that matches your deployment cadence.
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ SLIDE 07 -->
+<div class="slide" id="s6"
+  data-notes="This is the single most important slide. I want you to sit with these numbers. 82% pass rate sounds like a mature, deployable system. 20% pass-8 rate means it fails to complete a full work-session of the same task with 80% probability. These are not exotic edge cases — these are illustrative of real τ-bench results. The delta in relative terms between pass-1 and pass-8 is a 3-4x amplification.">
+  <div class="label"><span>07</span> / 18 — Act III</div>
+  <div class="h2">Pass¹ vs Pass⁸: Quantifying the Gap</div>
+  <hr class="hrule-heavy">
+  <div class="cols cols-2" style="flex:1; margin-top:10px;">
+    <div class="cmp-box">
+      <div class="cmp-head fail">Pass¹ — single-trial accuracy</div>
+      <div class="mono" style="font-size:44px; font-weight:600; color:var(--ink); margin:8px 0;">82%</div>
+      <hr class="hrule">
+      <ul class="blist" style="margin-top:8px;">
+        <li>Standard benchmark metric. One run per task.</li>
+        <li>Hides within-agent variance across trials.</li>
+        <li>Maps poorly to production: agents don't run once.</li>
+        <li>Inflated by lucky samples and partially-correct outputs.</li>
+      </ul>
+    </div>
+    <div class="cmp-box">
+      <div class="cmp-head pass">Pass⁸ — 8-trial reliability</div>
+      <div class="mono" style="font-size:44px; font-weight:600; color:var(--red); margin:8px 0;">20%</div>
+      <hr class="hrule">
+      <ul class="blist" style="margin-top:8px;">
+        <li>Same agent, same tasks — 8 independent runs each.</li>
+        <li>Reveals compounding failure probability.</li>
+        <li>Maps directly to per-session or per-day reliability.</li>
+        <li>Identifies agents worth deploying vs. agents needing work.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="callout" style="margin-top:12px;">
+    The <strong>35% relative increase</strong> in the benchmark gap (3pp → 62pp) between k=1 and k=8 is not an artefact — it is the mathematical consequence of compounding independent errors.
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ SLIDE 08 -->
+<div class="slide" id="s7"
+  data-notes="τ²-bench, released in 2025, makes three principal additions to τ-bench. Adversarial user simulation — the user sim is now scripted to exhibit realistic failure modes like contradictions and scope creep. Multi-agent evaluation — pipelines of orchestrator + sub-agents are evaluated end-to-end. And extended multi-turn complexity — tasks require more turns and more coherent state management.">
+  <div class="label"><span>08</span> / 18 — Act IV</div>
+  <div class="h2">τ²-bench: Three Extensions</div>
+  <hr class="hrule-heavy">
+  <div class="cols cols-3" style="flex:1; margin-top:10px;">
+    <div>
+      <div class="mono" style="font-size:10px; letter-spacing:0.2em; color:var(--ink3); margin-bottom:10px;">EXTENSION 01</div>
+      <div class="h3" style="margin-bottom:10px;">Adversarial User Simulation</div>
+      <ul class="blist">
+        <li>User LLM is scripted with failure modes: contradiction, scope creep, policy pressure, ambiguity injection.</li>
+        <li>Tests agent robustness, not just capability.</li>
+        <li>Typical pass rate reduction: −15 to −30pp vs cooperative baseline.</li>
+      </ul>
+    </div>
+    <div>
+      <div class="mono" style="font-size:10px; letter-spacing:0.2em; color:var(--ink3); margin-bottom:10px;">EXTENSION 02</div>
+      <div class="h3" style="margin-bottom:10px;">Multi-Agent Pipelines</div>
+      <ul class="blist">
+        <li>Orchestrator + specialised sub-agents evaluated end-to-end.</li>
+        <li>Failure attribution: orchestration layer vs execution layer.</li>
+        <li>Pass<sup>k</sup> compounds across agents: p<sub>orch</sub>·p<sub>sub</sub> &lt; min(p<sub>orch</sub>, p<sub>sub</sub>).</li>
+      </ul>
+    </div>
+    <div>
+      <div class="mono" style="font-size:10px; letter-spacing:0.2em; color:var(--ink3); margin-bottom:10px;">EXTENSION 03</div>
+      <div class="h3" style="margin-bottom:10px;">Multi-Turn Complexity</div>
+      <ul class="blist">
+        <li>Tasks require 6–12 turns with sustained coherence.</li>
+        <li>Error at turn t invalidates turns t+1..T (non-recoverable error model).</li>
+        <li>New domain: telecom, expanding coverage beyond airline/retail.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="callout" style="margin-top:12px;">
+    τ²-bench's central empirical finding: reliability gaps that appear large on τ-bench <em>grow further</em> under adversarial conditions. The ordering across models becomes more pronounced, not less.
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ SLIDE 09 -->
+<div class="slide" id="s8"
+  data-notes="The adversarial user is the most novel contribution of τ²-bench from a methodology standpoint. The adversarial user LLM receives specific instruction modes for each task — and this simulates the actually messy distribution of real user behaviour. The key finding is that cooperative user scores are a poor predictor of adversarial user scores. Models that are good at one can be surprisingly bad at the other.">
+  <div class="label"><span>09</span> / 18 — Act IV</div>
+  <div class="h2">Adversarial User Simulation: Failure Modes</div>
+  <hr class="hrule-heavy">
+  <div class="cols cols-2" style="flex:1; margin-top:10px;">
+    <div>
+      <ul class="blist">
+        <li><strong>Contradiction:</strong> user changes requirements mid-conversation ("I said aisle — actually, window").</li>
+        <li><strong>Scope creep:</strong> user adds unrelated requests once agent is committed ("while you're at it, can you also...").</li>
+        <li><strong>Policy pressure:</strong> user pushes for outcomes outside policy, claims ignorance, emotional escalation.</li>
+        <li><strong>Ambiguity injection:</strong> underspecified requests that force the agent to clarify or guess incorrectly.</li>
+        <li><strong>Supervisor escalation:</strong> user requests escalation regardless of agent response.</li>
+      </ul>
+    </div>
+    <div>
+      <div class="callout" style="margin-bottom:14px;">
+        <strong>Experimental finding (illustrative):</strong><br>
+        Mean pass rate under cooperative user: 78%<br>
+        Mean pass rate under adversarial user: 54%<br>
+        Δ = −24pp — but the <em>variance</em> across models increases, making model selection more meaningful.
+      </div>
+      <div class="callout blue">
+        <strong>Why this matters:</strong> if you evaluate only with cooperative simulated users, you are measuring a best-case distribution. Production users are adversarial in the statistical sense — their goals only partially align with what your policy permits.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ SLIDE 10 -->
+<div class="slide" id="s9"
+  data-notes="For multi-agent pipelines the key insight is that reliability compounds multiplicatively. If the orchestrator has pass rate p_o and a sub-agent has p_s, the combined pipeline pass rate is bounded above by p_o * p_s. In practice it's often lower because there are coordination errors that neither agent would make alone — context handoff failures, ambiguous delegation.">
+  <div class="label"><span>10</span> / 18 — Act IV</div>
+  <div class="h2">Multi-Agent Pipeline Reliability</div>
+  <hr class="hrule-heavy">
+  <div class="cols cols-56" style="flex:1; margin-top:10px;">
+    <div>
+      <svg width="100%" viewBox="0 0 340 180">
+        <!-- Orchestrator box -->
+        <rect x="10" y="70" width="90" height="44" fill="none" stroke="#1a1a18" stroke-width="1.5"/>
+        <text x="55" y="88" text-anchor="middle" font-size="9" fill="#1a1a18">ORCHESTRATOR</text>
+        <text x="55" y="103" text-anchor="middle" font-size="8" fill="#6a6a64">p = 0.92</text>
+        <!-- arrows out -->
+        <line x1="100" y1="83" x2="140" y2="55" stroke="#c8c7c2" stroke-width="1"/>
+        <line x1="100" y1="92" x2="140" y2="92" stroke="#c8c7c2" stroke-width="1"/>
+        <line x1="100" y1="101" x2="140" y2="129" stroke="#c8c7c2" stroke-width="1"/>
+        <!-- Sub-agent boxes -->
+        <rect x="140" y="30" width="80" height="34" fill="none" stroke="#1a4a8a" stroke-width="1"/>
+        <text x="180" y="46" text-anchor="middle" font-size="9" fill="#1a4a8a">LOOKUP</text>
+        <text x="180" y="58" text-anchor="middle" font-size="8" fill="#6a6a64">p = 0.95</text>
+        <rect x="140" y="75" width="80" height="34" fill="none" stroke="#1a4a8a" stroke-width="1"/>
+        <text x="180" y="91" text-anchor="middle" font-size="9" fill="#1a4a8a">ACTION</text>
+        <text x="180" y="103" text-anchor="middle" font-size="8" fill="#6a6a64">p = 0.88</text>
+        <rect x="140" y="120" width="80" height="34" fill="none" stroke="#1a4a8a" stroke-width="1"/>
+        <text x="180" y="136" text-anchor="middle" font-size="9" fill="#1a4a8a">POLICY</text>
+        <text x="180" y="148" text-anchor="middle" font-size="8" fill="#6a6a64">p = 0.96</text>
+        <!-- arrows in to output -->
+        <line x1="220" y1="47" x2="255" y2="80" stroke="#c8c7c2" stroke-width="1"/>
+        <line x1="220" y1="92" x2="255" y2="92" stroke="#c8c7c2" stroke-width="1"/>
+        <line x1="220" y1="137" x2="255" y2="104" stroke="#c8c7c2" stroke-width="1"/>
+        <!-- Output box -->
+        <rect x="255" y="70" width="76" height="44" fill="none" stroke="#c0392b" stroke-width="1.5"/>
+        <text x="293" y="88" text-anchor="middle" font-size="9" fill="#c0392b">PIPELINE</text>
+        <text x="293" y="100" text-anchor="middle" font-size="9" fill="#c0392b">p ≈ 0.74</text>
+        <text x="293" y="112" text-anchor="middle" font-size="7" fill="#6a6a64">0.92·0.88·0.96·0.95</text>
+      </svg>
+      <ul class="blist" style="margin-top:8px;">
+        <li>Pipeline pass rate bounded above by product of component pass rates.</li>
+        <li>Coordination errors add further reduction beyond simple product.</li>
+        <li>τ²-bench attributes failures to orchestration vs execution layer separately.</li>
+      </ul>
+    </div>
+    <div>
+      <div class="formula-block" style="margin-bottom:16px;">
+        <div class="formula" style="font-size:16px;">p<sub>pipeline</sub> ≤ ∏<sub>i</sub> p<sub>i</sub></div>
+        <div class="formula-sub">
+          with equality only if components<br>
+          fail independently (no coordination errors)
+        </div>
+      </div>
+      <div class="formula-block">
+        <div class="formula" style="font-size:14px;">Pass<sup>k</sup><sub>pipeline</sub><br>= (p<sub>pipeline</sub>)<sup>k</sup><br>≤ (∏<sub>i</sub> p<sub>i</sub>)<sup>k</sup></div>
+        <div class="formula-sub">
+          At k=8, p=0.74:<br>
+          Pass⁸ ≈ 0.74⁸ ≈ 7%
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ SLIDE 11 -->
+<div class="slide" id="s10"
+  data-notes="Here is the full results table. What I want you to notice is the delta column — the drop from Pass-1 to Pass-8 is substantial for every model and grows larger for lower-performing models. The best model at Pass-1 is also the best at Pass-8, which is a good sign, but the gap between first and last place has tripled.">
+  <div class="label"><span>11</span> / 18 — Act V</div>
+  <div class="h2">Results: τ-bench &amp; τ²-bench</div>
+  <hr class="hrule-heavy">
+  <table class="dtable" style="margin-top:12px;">
+    <tr>
+      <th>Model</th>
+      <th>τ-bench Pass¹</th>
+      <th>τ-bench Pass⁸</th>
+      <th>τ²-bench Pass¹</th>
+      <th>τ²-bench Pass⁴</th>
+      <th>Δ (Pass¹→Pass⁸)</th>
+      <th>Rank δ</th>
+    </tr>
+    <tr>
+      <td>GPT-4o</td>
+      <td class="mono hi">82%</td>
+      <td class="mono mid">20%</td>
+      <td class="mono mid">68%</td>
+      <td class="mono lo">21%</td>
+      <td class="mono lo">−62pp</td>
+      <td class="mono" style="color:var(--ink3)">1→1</td>
+    </tr>
+    <tr>
+      <td>Claude 3.5 Sonnet</td>
+      <td class="mono hi">79%</td>
+      <td class="mono lo">16%</td>
+      <td class="mono mid">65%</td>
+      <td class="mono lo">18%</td>
+      <td class="mono lo">−61pp</td>
+      <td class="mono" style="color:var(--ink3)">2→2</td>
+    </tr>
+    <tr>
+      <td>Gemini 1.5 Pro</td>
+      <td class="mono mid">74%</td>
+      <td class="mono lo">11%</td>
+      <td class="mono mid">59%</td>
+      <td class="mono lo">12%</td>
+      <td class="mono lo">−62pp</td>
+      <td class="mono" style="color:var(--ink3)">3→3</td>
+    </tr>
+    <tr>
+      <td>Llama 3 70B</td>
+      <td class="mono mid">68%</td>
+      <td class="mono lo">6%</td>
+      <td class="mono lo">51%</td>
+      <td class="mono lo">7%</td>
+      <td class="mono lo">−62pp</td>
+      <td class="mono" style="color:var(--ink3)">4→4</td>
+    </tr>
+    <tr style="background:var(--bg2);">
+      <td style="color:var(--ink3); font-style:italic;">Theoretical max</td>
+      <td class="mono hi">100%</td>
+      <td class="mono hi">100%</td>
+      <td class="mono hi">100%</td>
+      <td class="mono hi">100%</td>
+      <td class="mono" style="color:var(--green);">0pp</td>
+      <td class="mono" style="color:var(--ink3);">—</td>
+    </tr>
+  </table>
+  <div class="callout" style="margin-top:14px; max-width:900px;">
+    Data is illustrative based on τ-bench benchmark methodology. Δ = Pass¹ − Pass⁸ in percentage points. Rank δ = rank at k=1 → rank at k=8 — note ranking is stable here but this is not always the case across domains and task subsets.
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ SLIDE 12 -->
+<div class="slide" id="s11"
+  data-notes="The bar chart makes the gap visceral. Every left bar looks acceptable. Every right bar looks catastrophic. This is not a cherry-picked example — it is the mathematical consequence of any sub-unity pass rate raised to the 8th power. There is no amount of prompt engineering that fixes a fundamentally unreliable agent — you have to address the root cause of the per-trial failures.">
+  <div class="label"><span>12</span> / 18 — Act V</div>
+  <div class="h2">Pass¹ vs Pass⁸ — Visualised</div>
+  <hr class="hrule-heavy">
+  <svg width="100%" viewBox="0 0 680 260" style="display:block; margin-top:8px;">
+    <!-- axes -->
+    <line x1="80" y1="20" x2="80" y2="220" stroke="#c8c7c2" stroke-width="1"/>
+    <line x1="80" y1="220" x2="640" y2="220" stroke="#c8c7c2" stroke-width="1"/>
+    <!-- grid -->
+    <line x1="80" y1="70"  x2="640" y2="70"  stroke="#c8c7c2" stroke-dasharray="3,4" stroke-width="1"/>
+    <line x1="80" y1="120" x2="640" y2="120" stroke="#c8c7c2" stroke-dasharray="3,4" stroke-width="1"/>
+    <line x1="80" y1="170" x2="640" y2="170" stroke="#c8c7c2" stroke-dasharray="3,4" stroke-width="1"/>
+    <!-- y labels -->
+    <text x="72" y="74"  text-anchor="end" font-size="10" fill="#6a6a64">60%</text>
+    <text x="72" y="124" text-anchor="end" font-size="10" fill="#6a6a64">40%</text>
+    <text x="72" y="174" text-anchor="end" font-size="10" fill="#6a6a64">20%</text>
+    <text x="72" y="224" text-anchor="end" font-size="10" fill="#6a6a64">0%</text>
+    <!-- GPT-4o: Pass1=82, Pass8=20 -->
+    <rect x="100" y="38"  width="50" height="182" fill="#1a1a18" opacity="0.85"/>
+    <rect x="158" y="180" width="50" height="40"  fill="#1a1a18" opacity="0.25"/>
+    <!-- Claude: 79, 16 -->
+    <rect x="240" y="55"  width="50" height="165" fill="#1a1a18" opacity="0.7"/>
+    <rect x="298" y="188" width="50" height="32"  fill="#1a1a18" opacity="0.25"/>
+    <!-- Gemini: 74, 11 -->
+    <rect x="380" y="78"  width="50" height="142" fill="#1a1a18" opacity="0.55"/>
+    <rect x="438" y="198" width="50" height="22"  fill="#1a1a18" opacity="0.25"/>
+    <!-- Llama: 68, 6 -->
+    <rect x="520" y="104" width="50" height="116" fill="#c0392b" opacity="0.5"/>
+    <rect x="578" y="208" width="50" height="12"  fill="#c0392b" opacity="0.3"/>
+    <!-- value labels -->
+    <text x="125" y="34"  text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a18">82%</text>
+    <text x="183" y="176" text-anchor="middle" font-size="11" fill="#6a6a64">20%</text>
+    <text x="265" y="51"  text-anchor="middle" font-size="11" fill="#1a1a18">79%</text>
+    <text x="323" y="184" text-anchor="middle" font-size="11" fill="#6a6a64">16%</text>
+    <text x="405" y="74"  text-anchor="middle" font-size="11" fill="#1a1a18">74%</text>
+    <text x="463" y="194" text-anchor="middle" font-size="11" fill="#6a6a64">11%</text>
+    <text x="545" y="100" text-anchor="middle" font-size="11" fill="#c0392b">68%</text>
+    <text x="603" y="204" text-anchor="middle" font-size="11" fill="#c0392b">6%</text>
+    <!-- model labels -->
+    <text x="150" y="244" text-anchor="middle" font-size="10" fill="#1a1a18">GPT-4o</text>
+    <text x="288" y="244" text-anchor="middle" font-size="10" fill="#3a3a36">Claude 3.5</text>
+    <text x="428" y="244" text-anchor="middle" font-size="10" fill="#3a3a36">Gemini 1.5</text>
+    <text x="568" y="244" text-anchor="middle" font-size="10" fill="#c0392b">Llama 3 70B</text>
+    <!-- legend -->
+    <rect x="560" y="25" width="14" height="14" fill="#1a1a18" opacity="0.85"/>
+    <text x="578" y="36" font-size="10" fill="#1a1a18">Pass¹</text>
+    <rect x="560" y="44" width="14" height="14" fill="#1a1a18" opacity="0.25"/>
+    <text x="578" y="55" font-size="10" fill="#6a6a64">Pass⁸</text>
+  </svg>
+  <div class="body" style="margin-top:6px;">Left bar = single-trial accuracy. Right bar = 8-trial reliability. The right bars are the number that determines production cost.</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ SLIDE 13 -->
+<div class="slide" id="s12"
+  data-notes="Variance is under-discussed in the τ-bench literature. Two agents with the same mean pass rate p can have very different Pass^k profiles depending on their variance structure. An agent that is perfectly reliable on half the task space and never passes the other half will outperform a uniformly mediocre agent at large k — because those perfect tasks contribute k-for-k. This has real deployment implications: profile by task type, not just aggregate.">
+  <div class="label"><span>13</span> / 18 — Act V</div>
+  <div class="h2">Variance in the Pass<sup>k</sup> Decomposition</div>
+  <hr class="hrule-heavy">
+  <div class="cols cols-2" style="flex:1; margin-top:8px;">
+    <div>
+      <div class="cmp-box" style="margin-bottom:14px;">
+        <div class="cmp-head pass">Agent A — Low variance</div>
+        <div class="formula-block" style="display:block; margin:10px 0;">
+          <div class="formula" style="font-size:14px;">p<sub>i</sub> ≈ 0.75 ∀ i</div>
+          <div class="formula-sub">Uniform reliability across all tasks</div>
+        </div>
+        <div class="mono" style="font-size:13px; margin-top:8px; color:var(--ink);">Pass⁸ = 0.75⁸ ≈ <strong>10%</strong></div>
+      </div>
+      <div class="cmp-box">
+        <div class="cmp-head pass">Agent B — High variance (bimodal)</div>
+        <div class="formula-block" style="display:block; margin:10px 0;">
+          <div class="formula" style="font-size:14px;">p<sub>i</sub> ∈ {0.0, 1.0}</div>
+          <div class="formula-sub">Half tasks: p=1.0 always pass<br>Half tasks: p=0.0 always fail</div>
+        </div>
+        <div class="mono" style="font-size:13px; margin-top:8px; color:var(--ink);">Pass⁸ = 50% of tasks · 1.0 = <strong>50%</strong></div>
+      </div>
+    </div>
+    <div>
+      <ul class="blist" style="margin-top:4px;">
+        <li>Both agents have mean p ≈ 0.5. Agent B has dramatically higher Pass<sup>k</sup>.</li>
+        <li>Pass<sup>k</sup> rewards task-level specialisation — being perfectly reliable on a subset outperforms uniform mediocrity.</li>
+        <li>This is a feature, not a bug: it maps to the real deployment decision of routing tasks to specialised agents.</li>
+        <li>Implication: <em>profile Pass<sup>k</sup> by task category</em>, not just aggregate. The average can obscure deployable sub-domains.</li>
+      </ul>
+      <div style="margin-top:16px;" class="callout">
+        <strong>τ²-bench reports per-task Pass<sup>k</sup></strong> alongside aggregate, which enables this kind of sub-domain analysis.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ SLIDE 14 -->
+<div class="slide" id="s13"
+  data-notes="Statistical rigour. How many trials do you actually need? This is a frequently ignored practical question. The answer is uncomfortable: to estimate Pass-8 to within ±5 percentage points at 95% confidence, you need roughly 400 independent runs per task. This is expensive. τ²-bench addresses this with importance sampling and stratified task selection — but the fundamental tension between evaluation cost and statistical precision remains an open problem.">
+  <div class="label"><span>14</span> / 18 — Act V</div>
+  <div class="h2">Statistical Precision Requirements</div>
+  <hr class="hrule-heavy">
+  <div class="cols cols-2" style="flex:1; margin-top:10px;">
+    <div>
+      <div class="formula-block" style="margin-bottom:18px;">
+        <div class="formula">CI width = 2z · √(p̂(1−p̂)/n)</div>
+        <div class="formula-sub">
+          For ±5pp at 95%: z=1.96, target CI=0.10<br>
+          → n ≥ (1.96/0.10)² · p(1−p)<br>
+          → n ≥ 384 at p=0.5 (worst case)
+        </div>
+      </div>
+      <div class="cols cols-3" style="gap:10px;">
+        <div class="metric-box">
+          <div class="metric-label">k = 1</div>
+          <div class="metric-val mono" style="font-size:28px;">~50</div>
+          <div class="metric-sub">trials for ±10pp CI</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-label">k = 4</div>
+          <div class="metric-val mono" style="font-size:28px; color:var(--amber);">~200</div>
+          <div class="metric-sub">trials for ±5pp CI</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-label">k = 8</div>
+          <div class="metric-val mono" style="font-size:28px; color:var(--red);">~400</div>
+          <div class="metric-sub">trials for ±5pp CI</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <ul class="blist">
+        <li>Each additional trial multiplies evaluation cost linearly. k=8 costs 8× k=1.</li>
+        <li>τ²-bench defaults to k=4 as a compromise between precision and cost.</li>
+        <li>Importance sampling on high-variance tasks reduces cost while preserving statistical validity.</li>
+        <li>Stratified task selection ensures rare failure modes are represented.</li>
+      </ul>
+      <div style="margin-top:14px;" class="callout">
+        <strong>Practical heuristic:</strong> use k=3 for development (fast feedback), k=8 for pre-deployment decisions. Increase k for tasks with known high variance.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ SLIDE 15 -->
+<div class="slide" id="s14"
+  data-notes="Five concrete changes you should make. Stop reporting Pass-1 alone. Calibrate k to your deployment frequency — a task run daily needs k ≥ 30 if you want weekly reliability guarantees. Add adversarial user scenarios to your evaluation. Profile by task category. And evaluate your full pipeline, not just individual models.">
+  <div class="label"><span>15</span> / 18 — Act VI</div>
+  <div class="h2">Practical Guidance for Practitioners</div>
+  <hr class="hrule-heavy">
+  <div class="cols cols-2" style="flex:1; margin-top:10px;">
+    <table class="dtable" style="font-size:13px;">
+      <tr>
+        <th style="width:28px;">#</th>
+        <th>Action</th>
+        <th>Rationale</th>
+      </tr>
+      <tr>
+        <td class="mono red">01</td>
+        <td><strong>Report Pass<sup>k</sup>, not Pass¹</strong></td>
+        <td class="body" style="font-size:12px;">Calibrate k to your deployment: daily task → k ≥ 7</td>
+      </tr>
+      <tr>
+        <td class="mono red">02</td>
+        <td><strong>Add adversarial user scenarios</strong></td>
+        <td class="body" style="font-size:12px;">Cooperative users in eval ≠ real user distribution</td>
+      </tr>
+      <tr>
+        <td class="mono red">03</td>
+        <td><strong>Profile Pass<sup>k</sup> by task category</strong></td>
+        <td class="body" style="font-size:12px;">Aggregate can hide deployable high-reliability sub-domains</td>
+      </tr>
+      <tr>
+        <td class="mono red">04</td>
+        <td><strong>Evaluate the pipeline, not just the model</strong></td>
+        <td class="body" style="font-size:12px;">Orchestration errors are a distinct failure class</td>
+      </tr>
+      <tr>
+        <td class="mono red">05</td>
+        <td><strong>Track variance, not just mean pass rate</strong></td>
+        <td class="body" style="font-size:12px;">High variance signals brittle tasks worth routing elsewhere</td>
+      </tr>
+    </table>
+    <div>
+      <div class="callout" style="margin-bottom:14px;">
+        <strong>Choosing k in production:</strong><br>
+        If a task runs f times/day and you want p(zero failures/week) ≥ 0.95, you need Pass<sup>7f</sup> ≥ 0.95, which requires p ≥ 0.95<sup>1/(7f)</sup>. For f=10: p ≥ 0.9993.
+      </div>
+      <div class="callout blue">
+        <strong>The design principle:</strong> don't ask "does the agent work?" Ask "what is the probability that the agent works for the next 100 requests?" These are different questions with very different answers.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ SLIDE 16 -->
+<div class="slide" id="s15"
+  data-notes="Four genuinely open problems. Efficient Pass-k estimation without 400 trials per task. Task distribution shift — the benchmark tasks may not match your real task distribution and domain adaptation is unsolved. Cross-agent contamination in multi-agent systems. And the fundamental Goodhart problem: once Pass-k is a target, agents will be optimised for it in ways that may not generalise.">
+  <div class="label"><span>16</span> / 18 — Act VII</div>
+  <div class="h2">Open Problems</div>
+  <hr class="hrule-heavy">
+  <div class="cols cols-2" style="flex:1; margin-top:10px;">
+    <div>
+      <ul class="blist">
+        <li><strong>Efficient Pass<sup>k</sup> estimation.</strong> How do we estimate Pass<sup>8</sup> with 50 trials rather than 400? Current importance sampling approaches reduce cost but do not yet achieve this.</li>
+        <li><strong>Task distribution shift.</strong> τ-bench tasks are fixed at benchmark creation time. Real user distributions drift. Adaptation to downstream distributions is an open research problem.</li>
+        <li><strong>Cross-agent contamination.</strong> In multi-agent systems, does one agent's failure mode systematically affect another's? Error propagation in directed acyclic agent graphs is under-studied.</li>
+        <li><strong>Goodhart's law.</strong> Once Pass<sup>k</sup> becomes an optimisation target, what does the model sacrifice to achieve it? Are there adversarial high-Pass<sup>k</sup> behaviours that are low-utility?</li>
+      </ul>
+    </div>
+    <div>
+      <div class="blockq">
+        "When a measure becomes a target, it ceases to be a good measure."
+        <cite>— Goodhart (1975), cited in Strathern (1997)</cite>
+      </div>
+      <div style="margin-top:16px;" class="callout">
+        The deeper challenge is not building a better benchmark — it is building agents that are genuinely reliable in the IID and OOD sense, not agents that score well on known benchmarks. Pass<sup>k</sup> is a better proxy than Pass¹, but it is still a proxy.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ SLIDE 17 -->
+<div class="slide" id="s16"
+  data-notes="Five things to remember. I'd emphasise number four — the inversion point — because it is the one that changes deployment decisions. If you're choosing between two models and using Pass-1, you may be choosing the wrong one for your specific deployment k.">
+  <div class="label"><span>17</span> / 18 — Summary</div>
+  <div class="h2">Key Results &amp; Takeaways</div>
+  <hr class="hrule-heavy">
+  <div class="cols cols-2" style="flex:1; margin-top:10px;">
+    <table class="dtable">
+      <tr><th>#</th><th>Finding</th></tr>
+      <tr>
+        <td class="mono red">01</td>
+        <td class="body" style="font-size:13px;"><strong>Pass¹ systematically overstates reliability.</strong> At p=0.82, Pass⁸ ≈ 20%. The gap is not noise.</td>
+      </tr>
+      <tr>
+        <td class="mono red">02</td>
+        <td class="body" style="font-size:13px;"><strong>Reliability gaps amplify with k.</strong> A 3pp difference at k=1 becomes 7pp+ at k=8 in relative terms.</td>
+      </tr>
+      <tr>
+        <td class="mono red">03</td>
+        <td class="body" style="font-size:13px;"><strong>Adversarial users reduce pass rates −15 to −30pp</strong> and increase variance across models.</td>
+      </tr>
+      <tr>
+        <td class="mono red">04</td>
+        <td class="body" style="font-size:13px;"><strong>Model ranking can invert</strong> between k=1 and k=8 on specific task subsets. Validate at deployment k.</td>
+      </tr>
+      <tr>
+        <td class="mono red">05</td>
+        <td class="body" style="font-size:13px;"><strong>Statistical precision requires ~400 trials at k=8</strong> for ±5pp CI. Budget evaluation cost accordingly.</td>
+      </tr>
+    </table>
+    <div>
+      <div class="formula-block" style="margin-bottom:14px;">
+        <div class="formula" style="font-size:13px; color:var(--red);">
+          Don't ask:<br>
+          "How often does the agent succeed?"<br><br>
+          Ask:<br>
+          "What is Pr[agent succeeds<br>on all k of the next k requests]?"
+        </div>
+      </div>
+      <div class="callout">
+        <strong>References:</strong><br>
+        τ-bench: arXiv 2406.12045 (Yao et al., 2024)<br>
+        τ²-bench: arXiv 2506.07982 (Barres et al., 2025)<br>
+        Code: github.com/sierra-research/tau2-bench
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ SLIDE 18 -->
+<div class="slide" id="s17"
+  data-notes="Open for questions. Useful prompts if things are quiet: What k do you think is appropriate for your use case? Has anyone here actually measured pass-k > 1 for their agents? What would need to change about your evaluation pipeline to implement this?">
+  <div class="label"><span>18</span> / 18 — Q&amp;A</div>
+  <div class="display" style="margin-bottom:24px;">Questions &amp; Discussion</div>
+  <hr class="hrule-heavy" style="max-width:400px; margin-left:0;">
+  <div class="cols cols-2" style="margin-top:16px; max-width:780px;">
+    <div>
+      <div class="mono" style="font-size:10px; letter-spacing:0.2em; color:var(--ink3); margin-bottom:10px;">DISCUSSION PROMPTS</div>
+      <ul class="blist">
+        <li>What k value is appropriate for your current deployment?</li>
+        <li>Have you observed reliability failures that Pass¹ eval missed?</li>
+        <li>How do you handle evaluation cost at large k?</li>
+        <li>Is adversarial user simulation the right proxy for your domain?</li>
+      </ul>
+    </div>
+    <div>
+      <div class="mono" style="font-size:10px; letter-spacing:0.2em; color:var(--ink3); margin-bottom:10px;">REFERENCES</div>
+      <div class="mono" style="font-size:11px; line-height:2; color:var(--ink2);">
+        arXiv:2406.12045 [τ-bench]<br>
+        arXiv:2506.07982 [τ²-bench]<br>
+        github.com/sierra-research/tau2-bench<br>
+        tau-bench.com [leaderboard]
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const slides = Array.from(document.querySelectorAll('.slide'));
+const N = slides.length;
+let cur = 0;
+let secs = 0;
+
+function go(i) {
+  slides[cur].classList.remove('active');
+  cur = ((i % N) + N) % N;
+  slides[cur].classList.add('active');
+  document.getElementById('progress-fill').style.width = ((cur+1)/N*100)+'%';
+  document.getElementById('slide-n').textContent = (cur+1)+' / '+N;
+  document.getElementById('notes-text').textContent = slides[cur].dataset.notes || '—';
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key==='ArrowRight'||e.key==='PageDown'||e.key===' ') go(cur+1);
+  if (e.key==='ArrowLeft' ||e.key==='PageUp')                go(cur-1);
+  if (e.key==='n'||e.key==='N') document.getElementById('notes-bar').classList.toggle('open');
+  if (e.key==='Escape')         document.getElementById('notes-bar').classList.remove('open');
+});
+
+// click to advance
+document.addEventListener('click', e => {
+  if (!e.target.closest('#notes-bar')) go(cur+1);
+});
+
+setInterval(() => {
+  secs++;
+  const m = Math.floor(secs/60), s = secs%60;
+  document.getElementById('timer-badge').textContent = '⏱ '+m+':'+(s<10?'0':'')+s;
+}, 1000);
+
+go(0);
+</script>
+</body>
+</html>
