@@ -74,6 +74,8 @@ title: Dean Foulds – Data Scientist & ML Engineer
       <a target="_blank" rel="noopener noreferrer" href="projects/tau2_demo">View Demo</a>
       &nbsp;·&nbsp;
       <a target="_blank" rel="noopener noreferrer" href="projects/tau2_demo/tau2_bench_talk.html">View Talk</a>
+      &nbsp;·&nbsp;
+      <a target="_blank" rel="noopener noreferrer" href="https://arxiv.org/pdf/2406.12045">Paper</a>
     </div>
   </div>
 </section>
