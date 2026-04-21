@@ -27,6 +27,12 @@ title: Dean Foulds – Data Scientist & ML Engineer
   <h2>📂 Projects</h2>
   <div class="projects">
     <div class="project-card">
+      <h3>震度 Shindo — Japan Seismic Risk Graph</h3>
+      <p>Cascading seismic risk intelligence graph connecting 20,000 earthquakes, fault zones, tsunamis, nuclear facilities and prefectures. Neo4j Aura Agent hackathon entry with live AI chat, Text2Cypher, and similarity search.</p>
+      <a target="_blank" rel="noopener noreferrer" href="projects/shindo">View Project</a>
+    </div>
+
+    <div class="project-card">
       <h3>AMP SPC Project</h3>
       <p>A machine learning project focused on statistical process control and predictive analytics.</p>
       <a target="_blank" rel="noopener noreferrer" href="projects/amp_spc_project">View Project</a>
