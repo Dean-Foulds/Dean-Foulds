@@ -146,15 +146,7 @@ header {
   width: 88px; height: 88px;
   position: relative;
 }
-.header-avatar::before {
-  content: '';
-  position: absolute;
-  inset: -3px;
-  border-radius: 5px;
-  background: var(--grad);
-  animation: spin 6s linear infinite;
-  z-index: 0;
-}
+
 .header-avatar::after {
   content: '';
   position: absolute;
@@ -165,7 +157,7 @@ header {
   filter: blur(10px);
   z-index: -1;
 }
-@keyframes spin { to { transform: rotate(360deg); } }
+ }
 
 .header-avatar img {
   width: 88px; height: 88px;
