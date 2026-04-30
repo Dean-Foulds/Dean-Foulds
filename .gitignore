@@ -1,0 +1,6 @@
+_site/
+.jekyll-cache/
+.ruby-lsp/
+*.log
+.bundle/
+vendor/

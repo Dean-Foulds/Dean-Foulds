@@ -59,7 +59,7 @@ Ametek Aerospace, Skybus (Captain & First Officer / Air Ambulance Captain), Gill
 - Professional Machine Learning, Google, 2024  
 - Data Science & Machine Learning, Kaggle, 2021  
 - Certificate of Higher Education (Subjects Allied to Medicine), Birkbeck, 2022  
-- BSc(Hons) Mathematics & Physics, Open University, 2018  
+- BSc(Hons) Mathematics & Physics, 2018  
 - Ruby Programming, Le Wagon, 2020  
 - Deutsch Sprachkurs A1–B1, Goethe Institute, 2015  
 - HND Motor Vehicle Mechanical & Electrical Engineering, Mid-Kent College, 2001  
