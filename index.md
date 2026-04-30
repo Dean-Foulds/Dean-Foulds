@@ -103,24 +103,35 @@ title: Dean Foulds – Data Scientist & ML Engineer
   <h2>🏆 Work Experience</h2>
 
   <h3>AJW Aerospace — Data Scientist</h3>
-  <p class="job-meta">Apr 2025 – Present · Sussex</p>
+  <p class="job-meta">Apr 2025 – Present · Sussex, UK</p>
   <div class="job-bullets">
-    <p>Designed and deployed autonomous agentic AI systems within 8–12 week cycles, achieving ROI improvements of 15–30% above projections</p>
-    <p>Architected ML pipelines on AWS and GCP; Lean 4 / Mathlib proofs co-located with production risk models</p>
-    <p>Applied Monte Carlo, DCF, MCMC, and decision theory frameworks for risk assessment</p>
+    <p>Architected a dual-model production pricing pipeline combining XGBoost gradient-boosted regression and MCMC NUTS hierarchical Bayesian inference via NumPyro — transforming the dataset median price-to-bracket ratio from 9% to 101% through a critical data quality filter, enabling bracket-reasonable predictions across 184 unique part numbers for the first time</p>
+    <p>Built GARCH volatility modelling pipeline in JAX for aerospace parts risk assessment, with core mathematical properties formally verified in Lean 4 and Mathlib — covering pricing guardrails, volatility spike detection, and market propagation via the Banach fixed-point theorem, providing machine-checked correctness on live commercial decisions</p>
+    <p>Designed and delivered autonomous agentic AI systems consistently within 8–12 week cycles, achieving ROI improvements of 15–30% above projections; applied Monte Carlo simulation, DCF analysis, and decision theory frameworks for strategic risk assessment</p>
+    <p>Engineered end-to-end ML infrastructure on AWS SageMaker, Lambda, and EMR alongside Google Cloud Vertex AI and BigQuery, reducing deployment time for new models from weeks to days through reusable pipeline components</p>
   </div>
 
   <h3>ASN Submarine Cables — Data Scientist & ML Engineer</h3>
-  <p class="job-meta">Dec 2023 – Apr 2025 · London</p>
+  <p class="job-meta">Dec 2023 – Apr 2025 · London, UK</p>
   <div class="job-bullets">
-    <p>Converted corrective to predictive maintenance using ML failure prediction and machine vision anomaly detection</p>
-    <p>Applied SPC and MCMC predictive models; led Kaizen events improving DPMO via DMAIC and 8D</p>
+    <p>Converted corrective to predictive maintenance across fibre optic and laser manufacturing cells using ML failure prediction and machine vision anomaly detection — reducing time-to-detection of process drift from days to real-time and measurably decreasing unplanned downtime</p>
+    <p>Implemented SPC across 1590nm amp splice testing — identifying out-of-control events across over 21,000 tests and surfacing a significant Cost of Non-Quality directly attributable to blind splicing; recommended and validated corrective actions that addressed the root cause</p>
+    <p>Applied MCMC predictive models and statistical process control to reduce defect escape rates; led Kaizen events and Lean Manufacturing initiatives improving cell DPMO KPIs through DMAIC and 8D root cause elimination</p>
+    <p>Designed 3D-printed manufacturing fixtures in Fusion 360 and Creo, eliminating external procurement lead times and reducing component delivery from weeks to same-day production</p>
   </div>
 
   <h3>McLaren Racing — Complex Data Analysis</h3>
-  <p class="job-meta">Mar 2020 – Dec 2021 · Woking</p>
+  <p class="job-meta">Mar 2020 – Dec 2021 · Woking, UK</p>
   <div class="job-bullets">
-    <p>Implemented SPC and predictive ML models to reduce manufacturing defects; led FMEA, PPAP, and A/B testing</p>
+    <p>Implemented Statistical Process Control and predictive ML models across vehicle production lines in Python, MATLAB, and Octave — reducing manufacturing defect rates and improving first-pass yield on high-tolerance components</p>
+    <p>Led FMEA and PPAP protocols identifying and eliminating failure modes before production release; applied A/B testing frameworks to validate process improvements in cycle time and defect rates with statistical rigour</p>
+    <p>Delivered Power BI dashboards for real-time production monitoring, enabling data-driven decision-making at line and management level and reducing the time from data collection to actionable insight</p>
+  </div>
+
+  <h3>East Surrey College — Aeronautical Engineering Lecturer</h3>
+  <p class="job-meta">Mar 2022 – Dec 2023 · Redhill, UK</p>
+  <div class="job-bullets">
+    <p>Delivered mathematics, physics, Python programming, CAD, and Six Sigma DMAIC to aerospace engineering students; designed hands-on VSM and SPC exercises that connected theoretical quality methods to real manufacturing contexts</p>
   </div>
 </section>
 
