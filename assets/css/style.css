@@ -143,7 +143,7 @@ header {
 
 /* Spinning gradient ring avatar */
 .header-avatar {
-  width: 88px; height: 88px;
+  width: 88px; height: 88px; max-width: 88px; max-height: 88px;
   position: relative;
 }
 
@@ -567,3 +567,5 @@ footer {
   .projects { grid-template-columns: 1fr; }
   .stats-grid { grid-template-columns: repeat(2, 1fr); }
 }
+
+.header-avatar img { width: 88px; height: 88px; max-width: 88px; max-height: 88px; border-radius: 6px; object-fit: cover; border: 3px solid var(--bg); display: block; position: relative; z-index: 1; }
