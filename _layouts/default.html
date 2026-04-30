@@ -6,31 +6,132 @@
   <title>{{ page.title }}</title>
   <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
   <link rel="icon" type="image/png" href="/assets/images/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
+
+  <!-- Star field canvas -->
+  <canvas id="stars-canvas"></canvas>
+
+  <!-- Drifting glow orbs -->
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
   <header>
-    <img src="/assets/images/profile.jpg" alt="Dean Foulds" style="width:120px;height:120px;border-radius:50%;border:3px solid #fff;margin-bottom:12px;">
-    <h1>Dean Foulds</h1>
-    <p class="subtitle">Data Scientist & ML Engineer</p>
-    <p>📍 London | ✉️ deanfoulds@gmail.com</p>
-    <p>🌐 <a href="https://deanfoulds.xyz" target="_blank" rel="noopener noreferrer">Homepage</a> | 
-       <a href="https://www.linkedin.com/in/dean-foulds" target="_blank" rel="noopener noreferrer">LinkedIn</a> | 
-       <a href="https://github.com/Dean-Foulds" target="_blank" rel="noopener noreferrer">GitHub</a></p>
-    <p style="display:flex;gap:0.6rem;justify-content:center;flex-wrap:wrap;margin-top:0.5rem;">
-      <a href="/assets/dean_foulds_cv_2026.pdf" download style="display:inline-block;padding:0.45rem 1.2rem;background:linear-gradient(90deg,#4b8eff,#a259ff);color:#fff;border-radius:8px;font-weight:500;text-decoration:none;font-size:0.9rem;">Download CV (English)</a>
-      <a href="/assets/rirekisho.pdf" download style="display:inline-block;padding:0.45rem 1.2rem;background:linear-gradient(90deg,#a259ff,#ff6eeb);color:#fff;border-radius:8px;font-weight:500;text-decoration:none;font-size:0.9rem;">履歴書</a>
-      <a href="/assets/shokumu_keirekisho.pdf" download style="display:inline-block;padding:0.45rem 1.2rem;background:linear-gradient(90deg,#ff6eeb,#f0883e);color:#fff;border-radius:8px;font-weight:500;text-decoration:none;font-size:0.9rem;">職務経歴書</a>
-    </p>
+    <div class="hero-glow"></div>
+    <div class="header-inner">
+
+<!-- Avatar -->
+      <div class="header-avatar" style="border-radius:6px;border:2px solid transparent;background:linear-gradient(var(--bg),var(--bg)) padding-box,linear-gradient(135deg,#60a5ff,#b06eff,#ff7ef0) border-box;">
+        <img src="/assets/images/profile.jpg" alt="Dean Foulds">
+      </div>
+
+      <!-- Name & title -->
+      <div>
+        <div class="header-name">Dean Foulds</div>
+        <div class="header-title">Data Scientist &amp; ML Engineer</div>
+      </div>
+
+      <!-- Meta -->
+      <div class="header-meta">
+        <span>📍 Tokyo area, Japan</span>
+        <span>✉️ deanfoulds@gmail.com</span>
+        <span>🎓 BSc Mathematics &amp; Physics · Open University</span>
+      </div>
+
+      <!-- External links -->
+      <div class="header-links">
+        <a href="https://deanfoulds.xyz" target="_blank" rel="noopener noreferrer">🌐 Portfolio</a>
+        <a href="https://www.linkedin.com/in/dean-foulds" target="_blank" rel="noopener noreferrer">💼 LinkedIn</a>
+        <a href="https://github.com/Dean-Foulds" target="_blank" rel="noopener noreferrer">🐙 GitHub</a>
+      </div>
+
+      <!-- CV downloads -->
+      <div class="header-cvs">
+        <a href="/assets/dean_foulds_cv_2026.pdf" download class="btn-cv">⬇ Download CV</a>
+        <a href="/assets/rirekisho.pdf" download class="btn-cv">⬇ 履歴書</a>
+        <a href="/assets/shokumu_keirekisho.pdf" download class="btn-cv">⬇ 職務経歴書</a>
+      </div>
+
+    </div>
   </header>
+
+  <!-- Gradient divider line -->
+  <div class="header-border"></div>
+
   <main>
     <div class="content-wrapper">
       {{ content }}
     </div>
   </main>
+
   <footer>
-    © 2026 Dean Foulds – Data Scientist & ML Engineer
+    © 2026 Dean Foulds — Data Scientist &amp; ML Engineer &nbsp;·&nbsp; deanfoulds.xyz
   </footer>
+
+  <script>
+    /* ── Star field ─────────────────────────────────────── */
+    const canvas = document.getElementById('stars-canvas');
+    const ctx = canvas.getContext('2d');
+    let stars = [];
+
+    function resize() {
+      canvas.width  = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+
+    function initStars() {
+      stars = [];
+      const count = Math.floor((canvas.width * canvas.height) / 6000);
+      for (let i = 0; i < count; i++) {
+        stars.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          r: Math.random() * 1.2 + 0.2,
+          o: Math.random() * 0.6 + 0.1,
+          speed: Math.random() * 0.15 + 0.02,
+          twinkle: Math.random() * Math.PI * 2,
+        });
+      }
+    }
+
+    function drawStars(t) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      stars.forEach(s => {
+        s.twinkle += s.speed * 0.04;
+        const alpha = s.o * (0.6 + 0.4 * Math.sin(s.twinkle));
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(180,200,255,${alpha})`;
+        ctx.fill();
+      });
+      requestAnimationFrame(drawStars);
+    }
+
+    resize();
+    initStars();
+    drawStars();
+    window.addEventListener('resize', () => { resize(); initStars(); });
+
+    /* ── Scroll reveal ──────────────────────────────────── */
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          setTimeout(() => e.target.classList.add('visible'), i * 60);
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.06 });
+
+    document.querySelectorAll('.card-section, .project-card, .stat-card').forEach(el => {
+      el.classList.add('reveal');
+      observer.observe(el);
+    });
+  </script>
+
 </body>
 </html>
