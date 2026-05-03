@@ -5,8 +5,8 @@ title: Dean Foulds – Data Scientist & ML Engineer
 
 <section class="card-section">
   <h2>About Me</h2>
-  <p>I approach data science as a problem solver first — applying mathematical rigour and scientific methodology to untangle complex, high-stakes systems. My career spans over a decade across aerospace, motorsport, and subsea infrastructure: environments where disciplined thinking and verifiable results are not optional.</p>
-  <p>I specialise in agentic AI systems, JAX-based ML pipelines, and formal proof verification in Lean 4 and Mathlib — with over 30 machine-verified proofs applied to live production aerospace risk models. Two chips taped out in silicon via Tiny Tapeout. I consistently deliver autonomous systems within 8–12 weeks, achieving ROI improvements of 15–30% above projections.</p>
+  <p>I approach data science as a problem solver first — bringing mathematical rigour and scientific discipline to complex, high-stakes systems where verifiable results are non-negotiable. Over a decade across aerospace, motorsport, and subsea infrastructure has made that instinct second nature.</p>
+  <p>I specialise in agentic AI systems, JAX-based ML pipelines, and formal proof verification in Lean 4 and Mathlib. More than 30 machine-verified proofs are co-located with live production aerospace risk models — not academic exercises, but guarantees baked into the code that runs. I've taped out two silicon chips via Tiny Tapeout and consistently deliver autonomous systems within 8–12 weeks, with ROI improvements running 15–30% above projection.</p>
 </section>
 
 <section class="card-section">
