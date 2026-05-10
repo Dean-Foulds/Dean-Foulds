@@ -6,7 +6,7 @@ title: Dean Foulds – Data Scientist & ML Engineer
 <section class="card-section">
   <h2>About Me</h2>
   <p>I approach data science as a problem solver first — bringing mathematical rigour and scientific discipline to complex, high-stakes systems where verifiable results are non-negotiable. Over a decade across aerospace, motorsport, and subsea infrastructure has made that instinct second nature.</p>
-  <p>I specialise in agentic AI systems, JAX-based ML pipelines, and formal proof verification in Lean 4 and Mathlib. More than 30 machine-verified proofs are co-located with live production aerospace risk models — not academic exercises, but guarantees baked into the code that runs. I've taped out two silicon chips via Tiny Tapeout and consistently deliver autonomous systems within 8–12 weeks, with ROI improvements running 15–30% above projection.</p>
+  <p>I specialise in agentic AI systems, JAX-based ML pipelines, and formal proof verification in Lean 4 and Mathlib. More than 30 machine-verified proofs are co-located with live production aerospace risk models — not academic exercises, but guarantees baked into the code that runs. Two chips submitted to Tiny Tapeout; the Systolic BNN Accelerator (V2) has been selected for manufacture in silicon. I consistently deliver autonomous systems within 8–12 weeks, with ROI improvements running 15–30% above projection.</p>
 </section>
 
 <section class="card-section">
@@ -82,8 +82,8 @@ title: Dean Foulds – Data Scientist & ML Engineer
       <a target="_blank" rel="noopener noreferrer" href="projects/lean_projects">View Project</a>
     </div>
     <div class="project-card">
-      <h3>Systolic BNN Accelerator (V2)</h3>
-      <p>XNOR dot product engine, systolic dataflow, signed bias, balanced popcount tree. Taped out in silicon via Tiny Tapeout.</p>
+      <h3>Systolic BNN Accelerator (V2) <span style="font-size:0.7rem;background:#238636;color:#fff;padding:0.15rem 0.5rem;border-radius:999px;vertical-align:middle;font-weight:700;">Selected for Manufacture</span></h3>
+      <p>8-neuron XNOR-popcount accelerator on a 1×1 Tiny Tapeout tile. Systolic dataflow, signed bias, balanced popcount tree. Selected for silicon manufacture.</p>
       <a target="_blank" rel="noopener noreferrer" href="projects/bnn_accelerator">View Project</a>
     </div>
     <div class="project-card">
@@ -159,7 +159,7 @@ title: Dean Foulds – Data Scientist & ML Engineer
     <div class="stat-card">
       <div class="stat-card-label">Tiny Tapeout</div>
       <div class="stat-card-value">2 chips</div>
-      <div class="stat-card-sub">in silicon</div>
+      <div class="stat-card-sub">V2 selected for manufacture</div>
     </div>
     <div class="stat-card">
       <div class="stat-card-label">Experience</div>

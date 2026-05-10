@@ -5,7 +5,9 @@ title: Systolic Binary Neural Network Accelerator
 
 ## Systolic Binary Neural Network Accelerator (V2)
 
-A redesigned BNN inference chip for Tiny Tapeout — same 16 neurons as V1, but reimplemented as a proper hardware accelerator. Less silicon area, more capability, and fully aligned with how real AI chips like Google's TPU work.
+<span style="display:inline-block;background:#238636;color:#fff;padding:0.25rem 0.75rem;border-radius:999px;font-size:0.8rem;font-weight:700;letter-spacing:0.04em;margin-bottom:1rem;">✓ Selected for Manufacture — Tiny Tapeout</span>
+
+An 8-neuron BNN inference chip redesigned from the ground up for Tiny Tapeout manufacture — fitting a 1×1 tile footprint while matching the architecture of real AI accelerators. XNOR-popcount replaces the AND-threshold model of V1, systolic dataflow reuses hardware across 8 cycles, and placement density was tuned to 60% for successful routing through the OpenLane toolchain.
 
 ### Silicon Layout
 
@@ -17,6 +19,8 @@ A redesigned BNN inference chip for Tiny Tapeout — same 16 neurons as V1, but 
 
 | Property | V1 | V2 |
 |----------|----|----|
+| Neurons | 16 | 8 |
+| Tile size | 1×1 | 1×1 |
 | Dot product | AND | XNOR |
 | Compute style | Fully parallel | Systolic (1 bit/cycle) |
 | Latency | 1 clock cycle | 8 clock cycles |
@@ -24,6 +28,7 @@ A redesigned BNN inference chip for Tiny Tapeout — same 16 neurons as V1, but 
 | Decision | sum >= threshold | sum + bias >= 0 |
 | Threshold/bias | 4-bit unsigned | 5-bit signed |
 | Popcount | Linear chain | Balanced binary tree |
+| Placement density | — | 60% (routing-clean) |
 
 ---
 
@@ -55,6 +60,6 @@ Binary Neural Networks (Courbariaux & Bengio, 2016) replace 32-bit floating poin
 
 ### Practical Use — Anomaly Detection with Raspberry Pi
 
-At 10 MHz the chip classifies over 1 million sensor readings per second, entirely in hardware. Train weights offline in Python using the Rosenblatt perceptron learning rule, load them once at startup, then run inference continuously. All 16 neurons detect different fault signatures simultaneously, producing a 16-bit classification vector per inference pass.
+At 10 MHz the chip classifies over 1 million sensor readings per second, entirely in hardware. Train weights offline in Python using the Rosenblatt perceptron learning rule, load them once at startup, then run inference continuously. All 8 neurons detect different fault signatures simultaneously, producing an 8-bit classification vector per inference pass.
 
 [View on GitHub](https://github.com/Dean-Foulds/ttsky-wokwi-template){:target="_blank" rel="noopener noreferrer"}   [Tiny Tapeout](https://tinytapeout.com){:target="_blank" rel="noopener noreferrer"}
