@@ -62,7 +62,7 @@ title: Dean Foulds – Data Scientist & ML Engineer
       <a target="_blank" rel="noopener noreferrer" href="projects/shindo">View Project</a>
     </div>
     <div class="project-card">
-      <h3>Systolic BNN Accelerator (V2) <span style="font-size:0.7rem;background:rgba(74,222,128,0.08);color:#4ade80;border:1px solid rgba(74,222,128,0.35);border-radius:3px;padding:0.15rem 0.5rem;vertical-align:middle;font-weight:600;">✓ Selected for Fabrication</span></h3>
+      <h3>Systolic BNN Accelerator (V2) <span style="font-size:0.7rem;background:rgba(176,110,255,0.08);color:#b06eff;border:1px solid rgba(176,110,255,0.35);border-radius:3px;padding:0.15rem 0.5rem;vertical-align:middle;font-weight:600;">✓ Selected for Fabrication</span></h3>
       <p>8-neuron XNOR-popcount accelerator on a 1×1 Tiny Tapeout tile. Systolic dataflow, signed bias, balanced popcount tree. Selected for fabrication from a competitive group submission.</p>
       <a target="_blank" rel="noopener noreferrer" href="projects/bnn_accelerator">View Project</a>
     </div>
