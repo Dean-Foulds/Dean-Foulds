@@ -5,8 +5,9 @@ title: Dean Foulds – Data Scientist & ML Engineer
 
 <section class="card-section">
   <h2>About Me</h2>
-  <p>I approach data science as a problem solver first — bringing mathematical rigour and scientific discipline to complex, high-stakes systems where verifiable results are non-negotiable. Over a decade across aerospace, motorsport, and subsea infrastructure has made that instinct second nature.</p>
-  <p>I specialise in agentic AI systems, JAX-based ML pipelines, and formal proof verification in Lean 4 and Mathlib. More than 30 machine-verified proofs are co-located with live production aerospace risk models — not academic exercises, but guarantees baked into the code that runs. The Systolic BNN Accelerator (V2) was selected for fabrication from a competitive group submission via Tiny Tapeout. I consistently deliver autonomous systems within 8–12 weeks, with ROI improvements running 15–30% above projection.</p>
+  <p>Data scientist and ML engineer with fifteen years of software engineering experience spanning aerospace systems, formal verification, custom silicon design, and production AI infrastructure — translating rigorous analytical methods into deployable, measurable solutions.</p>
+  <p>My theoretical foundations include active contributions to mechanised proof development in Lean 4 and Mathlib covering real analysis, combinatorics, linear algebra, and propositional logic, extended into domain-specific formalisation: an Aircraft Parts Volatility Index model, war economy market propagation dynamics, and formal aerospace pricing guardrails. Core stack: JAX, PyTorch, Polars, scikit-learn, FastAPI, and LangChain with LangGraph on AWS and Railway.</p>
+  <p>My Neo4j Aura hackathon entry Shindo (震度) is a Japanese earthquake impact simulator — a knowledge graph across ~33,000 nodes enriched with a thirteen-class OWL ontology, Lettria semantic extraction, GEBCO bathymetric data, NOAA tsunami records, USGS seismic data, and a Claude tool use agent generating structured damage assessments at query time. My Systolic BNN Accelerator was separately selected for production on SkyWater 130nm silicon via Tiny Tapeout SKY26b — my second custom silicon tapeout.</p>
 </section>
 
 <section class="card-section">
