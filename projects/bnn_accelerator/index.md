@@ -5,7 +5,7 @@ title: Systolic Binary Neural Network Accelerator
 
 ## Systolic Binary Neural Network Accelerator (V2)
 
-<span style="display:inline-block;background:#238636;color:#fff;padding:0.25rem 0.75rem;border-radius:999px;font-size:0.8rem;font-weight:700;letter-spacing:0.04em;margin-bottom:1rem;">✓ Selected for Manufacture — Tiny Tapeout</span>
+<span style="display:inline-block;background:#238636;color:#fff;padding:0.25rem 0.75rem;border-radius:999px;font-size:0.8rem;font-weight:700;letter-spacing:0.04em;margin-bottom:1rem;">✓ Selected for Fabrication — Competitive Group Submission</span>
 
 An 8-neuron BNN inference chip redesigned from the ground up for Tiny Tapeout manufacture — fitting a 1×1 tile footprint while matching the architecture of real AI accelerators. XNOR-popcount replaces the AND-threshold model of V1, systolic dataflow reuses hardware across 8 cycles, and placement density was tuned to 60% for successful routing through the OpenLane toolchain.
 
