@@ -62,6 +62,11 @@ title: Dean Foulds – Data Scientist & ML Engineer
       <a target="_blank" rel="noopener noreferrer" href="projects/shindo">View Project</a>
     </div>
     <div class="project-card">
+      <h3>Systolic BNN Accelerator (V2) <span style="font-size:0.7rem;background:#238636;color:#fff;padding:0.15rem 0.5rem;border-radius:999px;vertical-align:middle;font-weight:700;">Selected for Manufacture</span></h3>
+      <p>8-neuron XNOR-popcount accelerator on a 1×1 Tiny Tapeout tile. Systolic dataflow, signed bias, balanced popcount tree. Selected for silicon manufacture.</p>
+      <a target="_blank" rel="noopener noreferrer" href="projects/bnn_accelerator">View Project</a>
+    </div>
+    <div class="project-card">
       <h3>AMP SPC Project</h3>
       <p>ML-driven SPC for 1590nm amp splice testing. 21,420 tests analysed, 99.7% yield confirmed, £143K CONQ identified. SVR production model.</p>
       <a target="_blank" rel="noopener noreferrer" href="projects/amp_spc_project">View Project</a>
@@ -80,11 +85,6 @@ title: Dean Foulds – Data Scientist & ML Engineer
       <h3>Lean Theorem Proving</h3>
       <p>Over 30 machine-verified proofs in Lean 4 and Mathlib spanning real analysis, topology, algebra, combinatorics, and war economy market propagation.</p>
       <a target="_blank" rel="noopener noreferrer" href="projects/lean_projects">View Project</a>
-    </div>
-    <div class="project-card">
-      <h3>Systolic BNN Accelerator (V2) <span style="font-size:0.7rem;background:#238636;color:#fff;padding:0.15rem 0.5rem;border-radius:999px;vertical-align:middle;font-weight:700;">Selected for Manufacture</span></h3>
-      <p>8-neuron XNOR-popcount accelerator on a 1×1 Tiny Tapeout tile. Systolic dataflow, signed bias, balanced popcount tree. Selected for silicon manufacture.</p>
-      <a target="_blank" rel="noopener noreferrer" href="projects/bnn_accelerator">View Project</a>
     </div>
     <div class="project-card">
       <h3>16-Neuron Binary Neural Network</h3>
